@@ -2,11 +2,15 @@ import React, {useState} from "react";
 import {Avatar, Box, Button, Grow, Stack, Typography} from "@mui/material";
 import {muiTheme} from "../theme";
 import StyledBadge from "../Components/StyledBadge";
+import ReactPlayer from "react-player";
 
-/** query params in yt url ?controls=0 */
+/** query params in yt url ?
+ * controls=0 -> frame con i controlli
+ * autoplay=1 -> autoplay del video
+ * */
 const Actors = [
-    {name: 'Mariano', timeout: 1700, link: `https://www.youtube.com/embed/h5VJ3WV6wBY`},
-    {name: 'Elena', timeout: 3200, link: `https://www.youtube.com/embed/kTPhzu4x7o8`},
+    {name: 'Mariano', timeout: 1700, link: `https://www.youtube.com/embed/h5VJ3WV6wBY?autoplay=1&mute=0`},
+    {name: 'Elena', timeout: 3200, link: `https://www.youtube.com/embed/kTPhzu4x7o8?autoplay=1&mute=0`},
 ]
 
 const Streaming = ({followedActor}) => {
@@ -15,11 +19,16 @@ const Streaming = ({followedActor}) => {
             <Typography textAlign={'center'}>
                 {followedActor?.name||''}
             </Typography>
-            <iframe src={followedActor?.link}
-                title={followedActor?.name}
-                    frameBorder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen/>
+            {/*<iframe src={followedActor?.link}
+                     title={followedActor?.name}
+                     frameBorder="0"
+                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                     allowFullScreen/>*/}
+            {<ReactPlayer url={followedActor?.link}
+                         controls={true}
+                         playing={true}
+                         width={'100%'}
+            />}
         </Box>
     );
 }
@@ -37,7 +46,7 @@ const MainStage = ({show}) => {
     }
 
     return (
-        <Stack p={2} sx={{height: '70vh'}} justifyContent={'center'}>
+        <Stack p={2} sx={{height: '70vh', backgroundColor: 'black'}} justifyContent={'center'}>
             <Streaming followedActor={followedActor}/>
             <Box px={2} position={"fixed"} bottom={40} left={0} right={0}>
                 <Typography gutterBottom color={`lightgray`}>

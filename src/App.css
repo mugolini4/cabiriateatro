@@ -15,6 +15,7 @@
 
 .App-header {
   background-color: #393a3b;
+  background-color: black;
   min-height: 100vh;
   font-size: calc(10px + 2vmin);
   font-family: 'Montserrat', 'Helvetica Neue', 'Arial', 'sans-serif', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
