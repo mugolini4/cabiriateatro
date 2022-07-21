@@ -9,8 +9,8 @@ import ReactPlayer from "react-player";
  * autoplay=1 -> autoplay del video
  * */
 const Actors = [
-    {name: 'Mariano', timeout: 1700, link: `https://www.youtube.com/embed/h5VJ3WV6wBY?autoplay=1&mute=0`},
-    {name: 'Elena', timeout: 3200, link: `https://www.youtube.com/embed/kTPhzu4x7o8?autoplay=1&mute=0`},
+    {name: 'Stanza 1', picture: '/nasa.png', timeout: 1700, link: `https://www.youtube.com/embed/21X5lGlDOfg?autoplay=1&mute=0`},
+    {name: 'Stanza 2', picture: '/vox.png', timeout: 3200, link: `https://www.youtube.com/embed/gvpE6615qec?autoplay=1&mute=0`},
 ]
 
 const Streaming = ({followedActor}) => {
@@ -50,7 +50,7 @@ const MainStage = ({show}) => {
             <Streaming followedActor={followedActor}/>
             <Box px={2} position={"fixed"} bottom={40} left={0} right={0}>
                 <Typography gutterBottom color={`lightgray`}>
-                    {'Scegli chi vuoi spiare...'}
+                    {'Scegli dove vuoi andare...'}
                 </Typography>
                 <Stack direction={'row'} justifyContent={'space-evenly'} alignItems={'center'}>
             {Object.values(Actors).map((actor, index) =>
@@ -60,14 +60,14 @@ const MainStage = ({show}) => {
                             overlap="circular"
                             anchorOrigin={{vertical: 'bottom', horizontal: 'right'}}
                             variant="dot">
-                            <Avatar src={'/img.png'}
+                            <Avatar src={actor.picture}
                                     sx={{
                                         width: 80, height: 80,
                                         border: `4px solid ${muiTheme.palette.primary.main}`,
                                         boxShadow: `5px 8px 18px 0px ${muiTheme.palette.secondary.main}`
                                     }}/>
                         </StyledBadge>
-                        : <Avatar src={'/img.png'}
+                        : <Avatar src={actor.picture}
                                   sx={{
                                       width: 64, height: 64,
                                       boxShadow: `5px 8px 18px 0px ${muiTheme.palette.secondary.main}`

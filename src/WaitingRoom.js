@@ -26,10 +26,10 @@ const WaitingRoom = () => {
                  }}
                  alt={'cabiria_logo'}/>
             <Typography gutterBottom variant={"h3"} color={`gray`}>
-                ROMEO & GIULIETTA
+                TEATRO IBRIDO
             </Typography>
-            <Typography gutterBottom variant={"h6"} color={`gray`}>
-                Lo spettacolo sta per iniziare...
+            <Typography gutterBottom variant={"h6"} color={`gray`} sx={{paddingX: 4}}>
+                Con questo test ci stai aiutando a realizzare un'opera ibrida tra il mondo fisico e quello digitale...
             </Typography>
             <Button component={Link} to="/main"
                     endIcon={<Start/>} variant={'outlined'}
