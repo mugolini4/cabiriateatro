@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import {Avatar, Box, Button, Grow, Stack, Typography} from "@mui/material";
 import {muiTheme} from "../theme";
-import StyledBadge from "../Components/StyledBadge";
+import StyledBadge from "../components/StyledBadge";
 import ReactPlayer from "react-player";
 
 /** query params in yt url ?
@@ -9,8 +9,8 @@ import ReactPlayer from "react-player";
  * autoplay=1 -> autoplay del video
  * */
 const Actors = [
-    {name: 'Mariano', timeout: 1700, link: `https://www.youtube.com/embed/h5VJ3WV6wBY?autoplay=1&mute=0`},
-    {name: 'Elena', timeout: 3200, link: `https://www.youtube.com/embed/kTPhzu4x7o8?autoplay=1&mute=0`},
+    {name: 'Romeo', timeout: 1700, link: `https://www.youtube.com/embed/h5VJ3WV6wBY?autoplay=1&mute=0`},
+    {name: 'Giulia', timeout: 3200, link: `https://www.youtube.com/embed/kTPhzu4x7o8?autoplay=1&mute=0`},
 ]
 
 const Streaming = ({followedActor}) => {
