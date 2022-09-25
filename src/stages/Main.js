@@ -9,8 +9,9 @@ import ReactPlayer from "react-player";
  * autoplay=1 -> autoplay del video
  * */
 const Actors = [
-    {name: 'Romeo', timeout: 1700, link: `https://www.youtube.com/embed/h5VJ3WV6wBY?autoplay=1&mute=0`},
-    {name: 'Giulia', timeout: 3200, link: `https://www.youtube.com/embed/kTPhzu4x7o8?autoplay=1&mute=0`},
+    {name: 'Romeo', timeout: 1700, link: `https://www.youtube.com/embed/pk0Oi6FWaOs?autoplay=1&mute=0`},
+    {name: 'Giulia', timeout: 3200, link: `https://www.youtube.com/embed/WVKzR2G0Wyc?autoplay=1&mute=0`},
+    //{name: 'Giulia', timeout: 3200, link: `https://www.youtube.com/embed/channel/UCMesJQDqxYkz7rLNZv2adNg/live`},
 ]
 
 const Streaming = ({followedActor}) => {
