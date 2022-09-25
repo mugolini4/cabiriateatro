@@ -29,7 +29,7 @@ const WaitingRoom = () => {
                 ROMEO & GIULIETTA
             </Typography>
             <Typography gutterBottom variant={"h6"} color={`gray`}>
-                Lo spettacolo sta per iniziare...
+                Lo spettacolo sta per iniziare....
             </Typography>
             <Button component={Link} to="/main"
                     endIcon={<Start/>} variant={'outlined'}
