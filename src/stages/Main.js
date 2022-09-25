@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import {Avatar, Box, Button, Grow, Stack, Typography} from "@mui/material";
 import {muiTheme} from "../theme";
-import StyledBadge from "../Components/StyledBadge";
+import StyledBadge from "../components/StyledBadge";
 import ReactPlayer from "react-player";
 
 /** query params in yt url ?
