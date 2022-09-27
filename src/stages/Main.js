@@ -9,9 +9,14 @@ import ReactPlayer from "react-player";
  * autoplay=1 -> autoplay del video
  * */
 const Actors = [
-    // TODO: mettere link dirette YT
-    {name: 'Romeo', timeout: 1700, link: `https://www.youtube.com/embed/pk0Oi6FWaOs?autoplay=1&mute=0`},
-    {name: 'Giulia', timeout: 3200, link: `https://www.youtube.com/embed/WVKzR2G0Wyc?autoplay=1&mute=0`},
+    {name: 'Romeo',
+        timeout: 1700,
+        img: '/Romeo.jpeg',
+        link: `https://www.youtube.com/embed/pk0Oi6FWaOs?autoplay=1&mute=0`},
+    {name: 'Giulia',
+        timeout: 3200,
+        img: '/Giulietta.jpeg',
+        link: `https://www.youtube.com/embed/WVKzR2G0Wyc?autoplay=1&mute=0`},
     //{name: 'Giulia', timeout: 3200, link: `https://www.youtube.com/embed/channel/UCMesJQDqxYkz7rLNZv2adNg/live`},
 ]
 
@@ -27,9 +32,9 @@ const Streaming = ({followedActor}) => {
                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                      allowFullScreen/>*/}
             {<ReactPlayer url={followedActor?.link}
-                         controls={true}
-                         playing={true}
-                         width={'100%'}
+                          controls={true}
+                          playing={true}
+                          width={'100%'}
             />}
         </Box>
     );
@@ -55,28 +60,28 @@ const MainStage = ({show}) => {
                     {'Scegli chi vuoi spiare...'}
                 </Typography>
                 <Stack direction={'row'} justifyContent={'space-evenly'} alignItems={'center'}>
-            {Object.values(Actors).map((actor, index) =>
-                <Grow key={index} in={show} mountOnEnter timeout={actor.timeout}>
-                    <Box onClick={() => handleChangeActor(index)} display={'flex'} flexDirection={'column'} alignItems={'center'}>
-                        {isSelected(index) ? <StyledBadge
-                            overlap="circular"
-                            anchorOrigin={{vertical: 'bottom', horizontal: 'right'}}
-                            variant="dot">
-                            <Avatar src={'/img.png'}
-                                    sx={{
-                                        width: 80, height: 80,
-                                        border: `4px solid ${muiTheme.palette.primary.main}`,
-                                        boxShadow: `5px 8px 18px 0px ${muiTheme.palette.secondary.main}`
-                                    }}/>
-                        </StyledBadge>
-                        : <Avatar src={'/img.png'}
-                                  sx={{
-                                      width: 64, height: 64,
-                                      boxShadow: `5px 8px 18px 0px ${muiTheme.palette.secondary.main}`
-                                  }}/>}
-                        <Button size={'large'}>{actor.name}</Button>
-                    </Box>
-                </Grow>)}
+                    {Object.values(Actors).map((actor, index) =>
+                        <Grow key={index} in={show} mountOnEnter timeout={actor.timeout}>
+                            <Box onClick={() => handleChangeActor(index)} display={'flex'} flexDirection={'column'} alignItems={'center'}>
+                                {isSelected(index) ? <StyledBadge
+                                        overlap="circular"
+                                        anchorOrigin={{vertical: 'bottom', horizontal: 'right'}}
+                                        variant="dot">
+                                        <Avatar src={actor.img}
+                                                sx={{
+                                                    width: 80, height: 80,
+                                                    border: `4px solid ${muiTheme.palette.primary.main}`,
+                                                    boxShadow: `5px 8px 18px 0px ${muiTheme.palette.secondary.main}`
+                                                }}/>
+                                    </StyledBadge>
+                                    : <Avatar src={actor.img}
+                                              sx={{
+                                                  width: 64, height: 64,
+                                                  boxShadow: `5px 8px 18px 0px ${muiTheme.palette.secondary.main}`
+                                              }}/>}
+                                <Button size={'large'}>{actor.name}</Button>
+                            </Box>
+                        </Grow>)}
                 </Stack>
             </Box>
         </Stack>
