@@ -2,7 +2,7 @@ import {alpha, createTheme} from "@mui/material";
 
 const PRIMARY = "#aba75f";
 const SECONDARY = "#808080";
-const BACKGROUND = "#393a3b";
+export const BACKGROUND = "#393a3b";
 const ERROR = "#b00020";
 
 const font = "'Montserrat','Helvetica Neue','Arial','sans-serif','Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol'"
@@ -34,6 +34,48 @@ export const muiTheme = createTheme({
             defaultProps: {
                 fontFamily: font,
             },
+        },
+        MuiInputLabel: {
+            styleOverrides: {
+                root: {
+                    color: "#252a33",
+                },
+            }
+        },
+        MuiInputBase: {
+            variants: [
+                {
+                    props: {variant: 'control'},
+                    style: {
+                        color: 'red',
+                        "& input": {
+                            textAlign: "center"
+                        }
+                    }
+                }
+            ],
+            styleOverrides: {
+                root: {
+                    color: "#252a33",
+                    "& input": {
+                        textAlign: "center"
+                    }
+                },
+            }
+        },
+        MuiTextField: {
+            styleOverrides: {
+                root: {
+                    background: 'white',
+                    borderRadius: '1rem',
+                    borderColor: '#252a33',
+                    boxShadow: 'none',
+                    '& fieldset': {
+                        borderRadius: `1rem`,
+                        textAlign: "center"
+                    },
+                }
+            }
         },
         MuiLink: {
             defaultProps: {

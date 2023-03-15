@@ -1,9 +1,9 @@
 import React from "react";
 import {Box, Button, Typography} from "@mui/material";
 import {Start} from "@mui/icons-material";
-import logo from "./instable_gomboc.gif";
+import logo from "../instable_gomboc.gif";
 import {Link} from "react-router-dom";
-import {muiTheme} from "./theme";
+import {muiTheme} from "../theme";
 
 export const waitingRoomSx = {
     backgroundColor: muiTheme.palette.background.main,

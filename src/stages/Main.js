@@ -10,7 +10,7 @@ import {firestore} from "../firebase_config";
  * controls=0 -> frame con i controlli
  * autoplay=1 -> autoplay del video
  * */
-const Actors = [
+export const Actors = [
     {
         id: 'romeo',
         name: 'Romeo',
