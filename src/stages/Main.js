@@ -1,26 +1,36 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Avatar, Box, Button, Grow, Stack, Typography} from "@mui/material";
 import {muiTheme} from "../theme";
 import StyledBadge from "../components/StyledBadge";
 import ReactPlayer from "react-player";
+import {useDocument, useDocumentData} from "react-firebase-hooks/firestore";
+import {firestore} from "../firebase_config";
 
 /** query params in yt url ?
  * controls=0 -> frame con i controlli
  * autoplay=1 -> autoplay del video
  * */
 const Actors = [
-    {name: 'Romeo',
+    {
+        id: 'romeo',
+        name: 'Romeo',
         timeout: 1700,
         img: '/Romeo.jpeg',
-        link: `https://www.youtube.com/embed/pk0Oi6FWaOs?autoplay=1&mute=0`},
-    {name: 'Giulia',
+        link: `https://www.youtube.com/embed/kmFdwPYOlYw?autoplay=1&mute=0`
+    },
+    {
+        id: 'giulietta',
+        name: 'Giulia',
         timeout: 3200,
         img: '/Giulietta.jpeg',
-        link: `https://www.youtube.com/embed/WVKzR2G0Wyc?autoplay=1&mute=0`},
-    //{name: 'Giulia', timeout: 3200, link: `https://www.youtube.com/embed/channel/UCMesJQDqxYkz7rLNZv2adNg/live`},
+        link: `https://www.youtube.com/embed/CCdlDNtc4hc?autoplay=1&mute=0`,
+    //{name: 'Giulia', timeout: 3200, link: `https://www.youtube.com/embed/channel/UCMesJQDqxYkz7rLNZv2adNg/live`
+    },
 ]
 
 const Streaming = ({followedActor}) => {
+    const [actorData, actorDataLoading, actorDataError] = useDocumentData(firestore.doc('streamingLinks/'+followedActor.id))
+
     return (
         <Box py={2}>
             <Typography textAlign={'center'}>
@@ -31,7 +41,7 @@ const Streaming = ({followedActor}) => {
                      frameBorder="0"
                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                      allowFullScreen/>*/}
-            {<ReactPlayer url={followedActor?.link}
+            {<ReactPlayer url={actorData?.link}
                           controls={true}
                           playing={true}
                           width={'100%'}
@@ -43,7 +53,6 @@ const Streaming = ({followedActor}) => {
 const MainStage = ({show}) => {
     const [followedActor, toggleFollowedActor] = useState(undefined)
 
-    console.log("followedActor:",followedActor)
     const handleChangeActor = (index) => {
         toggleFollowedActor(Actors[index])
     }
@@ -54,7 +63,7 @@ const MainStage = ({show}) => {
 
     return (
         <Stack p={2} sx={{height: '70vh', backgroundColor: 'black'}} justifyContent={'center'}>
-            <Streaming followedActor={followedActor}/>
+            {followedActor && <Streaming followedActor={followedActor}/>}
             <Box px={2} position={"fixed"} bottom={40} left={0} right={0}>
                 <Typography gutterBottom color={`lightgray`}>
                     {'Scegli chi vuoi spiare...'}

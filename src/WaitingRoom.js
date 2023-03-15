@@ -43,10 +43,10 @@ const WaitingRoom = () => {
                 Lo spettacolo sta per iniziare....
             </Typography>*/}
             {<Typography variant={"h6"} color={`gray`}>
-                @Casa Bossi, Novara
+                @Teatro Coccia, Novara
             </Typography>}
             {<Typography variant={"subtitle1"} color={`gray`}>
-                30 Settembre 2022, Ore 21:00
+                14 Aprile 2023, Ore 21:00
             </Typography>}
             {<Typography variant={"subtitle1"} color={`gray`} fontWeight={900}>
                 Portate le cuffie!
@@ -54,7 +54,8 @@ const WaitingRoom = () => {
             <Button component={Link} to="/main"
                     endIcon={<Start/>} variant={'outlined'}
                     //disabled={Date.now() <= new Date(2022, 5, 3)}
-                    disabled
+                    //TODO: RICORDA DI TOGLIERE IL DISABLED
+                    //disabled
                     style={{marginTop: '8%'}} size={'large'}>
                 ENTRA
             </Button>
