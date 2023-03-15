@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useMemo, useState} from "react";
 import {Avatar, Box, Button, Grow, Stack, Typography} from "@mui/material";
 import {muiTheme} from "../theme";
 import StyledBadge from "../components/StyledBadge";
@@ -31,6 +31,12 @@ const Actors = [
 const Streaming = ({followedActor}) => {
     const [actorData, actorDataLoading, actorDataError] = useDocumentData(firestore.doc('streamingLinks/'+followedActor.id))
 
+    const actorLink = useMemo(() => {
+        if(!actorData)
+            return null
+        return `https://www.youtube.com/embed/${actorData?.streamingString}?autoplay=1&mute=0`
+    }, [actorData])
+
     return (
         <Box py={2}>
             <Typography textAlign={'center'}>
@@ -41,7 +47,7 @@ const Streaming = ({followedActor}) => {
                      frameBorder="0"
                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                      allowFullScreen/>*/}
-            {<ReactPlayer url={actorData?.link}
+            {<ReactPlayer url={actorLink}
                           controls={true}
                           playing={true}
                           width={'100%'}
