@@ -1,8 +1,9 @@
 import {muiTheme} from "../theme";
-import {Avatar, Button, Chip, IconButton, Paper, Stack, TextField, Tooltip, Typography} from "@mui/material";
+import {Avatar, Box, Button, Chip, IconButton, Paper, Stack, TextField, Tooltip, Typography} from "@mui/material";
 import React, {useState} from "react";
 import {Actors} from "../stages/Main";
 import {ContentCopy, PlayCircle} from "@mui/icons-material";
+import {firestore} from "../firebase_config";
 
 export const controlRoomSx = {
     backgroundColor: muiTheme.palette.background.main,
@@ -41,6 +42,19 @@ const Control = () => {
         setState({...state, [event.target.id]: {link: event.target.value, code: getCodeLink(event.target.value)}});
     }
 
+    const copyLink = async (url) => {
+        await navigator.clipboard.writeText(url).then()
+    }
+
+    function handlePlayLiveLink(actorId) {
+        firestore.collection('streamingLinks').doc(actorId).set(
+            {
+                link: state[actorId].link,
+                streamingString: state[actorId].code
+            },{merge:true}
+        ).then()
+    }
+
     return (
         <Stack sx={controlRoomSx} alignItems={'center'}>
             <Typography variant={'h4'} gutterBottom color={muiTheme.palette.primary.main}>
@@ -53,7 +67,7 @@ const Control = () => {
                            color={'white'}
                            sx={{background: 'transparent'}}
                            alignItems={'flex-start'} justifyContent={'left'}>
-                        <Stack direction={"row"} alignItems={'center'} justifyContent={'center'} width={'65%'}>
+                        <Stack direction={"row"} alignItems={'center'} justifyContent={'center'} width={'70%'}>
                             <Avatar src={actor.img}
                                     sx={{
                                         width: 64, height: 64,
@@ -108,8 +122,13 @@ const Control = () => {
                             </Stack>*/}
                         </Stack>
                         <Stack mt={3} direction={'row'} marginLeft={'auto'} alignItems={'center'} spacing={1}>
-                            <Chip label={'Embed Link'} color={'primary'} size={'small'}/>
-                            <Typography textAlign={'center'} color={'white'} variant={'subtitle2'}>
+                            <Chip label={'Embed Link'} color={'primary'}
+                                  variant={!state[actor.id].code || state[actor.id].code?.length !== 11 ? 'outlined' : 'standard'}
+                                  size={'small'}/>
+                            <Box>
+                            <Typography textAlign={'center'} color={'white'} variant={'subtitle2'} flexWrap={'wrap'}
+                                        sx={{wordBreak: 'break-word'}}
+                            >
                                 <a
                                     className="App-link"
                                     href={getLink(actor.id)}
@@ -118,11 +137,13 @@ const Control = () => {
                                     {getLink(actor.id)}
                                 </a>
                             </Typography>
+                            </Box>
                             <Stack direction={'row'} spacing={2}>
                                 <Tooltip title={'Copia link da embeddare'}>
                                     <IconButton variant={'contained'}
                                                 sx={{color: muiTheme.palette.primary.main}}
                                                 disabled={!state[actor.id].code || state[actor.id].code?.length !== 11}
+                                                onClick={() => copyLink(getLink(actor.id))}
                                     >
                                         <ContentCopy/>
                                     </IconButton>
@@ -130,8 +151,9 @@ const Control = () => {
                                 <Tooltip title={'Mandando il link live l\'app aggiornerà il player di ' + actor.name}>
                                     <span>
                                         <Button variant={'contained'} fullWidth startIcon={<PlayCircle/>}
+                                                onClick={() => handlePlayLiveLink(actor.id)}
                                                 disabled={!state[actor.id].code || state[actor.id].code?.length !== 11}>
-                                            Manda live
+                                            Play
                                         </Button>
                                     </span>
                                 </Tooltip>
