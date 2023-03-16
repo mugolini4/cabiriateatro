@@ -3,7 +3,7 @@ import {Avatar, Box, Button, Grow, Stack, Typography} from "@mui/material";
 import {muiTheme} from "../theme";
 import StyledBadge from "../components/StyledBadge";
 import ReactPlayer from "react-player";
-import {useDocument, useDocumentData} from "react-firebase-hooks/firestore";
+import {useDocumentData} from "react-firebase-hooks/firestore";
 import {firestore} from "../firebase_config";
 
 /** query params in yt url ?

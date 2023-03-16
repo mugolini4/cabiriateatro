@@ -1,9 +1,11 @@
 import React from "react";
-import {Box, Button, Typography} from "@mui/material";
+import {Backdrop, Box, Button, CircularProgress, Typography} from "@mui/material";
 import {Start} from "@mui/icons-material";
 import logo from "../instable_gomboc.gif";
 import {Link} from "react-router-dom";
 import {muiTheme} from "../theme";
+import {useDocumentData} from "react-firebase-hooks/firestore";
+import {firestore} from "../firebase_config";
 
 export const waitingRoomSx = {
     backgroundColor: muiTheme.palette.background.main,
@@ -15,8 +17,11 @@ export const waitingRoomSx = {
 }
 
 const WaitingRoom = () => {
+    const [showData, showDataLoading, ] = useDocumentData(firestore.doc('config/show'))
+
     return (
         <Box sx={waitingRoomSx}>
+            {<Backdrop open={showDataLoading} children={<CircularProgress/>} sx={{zIndex:1}}/>}
             <img src={'/img.png'} width={'55px'}
                  style={{
                      filter: `opacity(0.45)`,
@@ -29,7 +34,7 @@ const WaitingRoom = () => {
                 Le Notti di Cabiria presenta
             </Typography>}
             <Typography gutterBottom variant={"h4"} color={`gray`} paddingX={1}>
-                ROMEO & GIULIETTA
+                {showData?.name}
             </Typography>
             <img src={'/cover.jpeg'} width={'310px'}
                  style={{
@@ -43,19 +48,19 @@ const WaitingRoom = () => {
                 Lo spettacolo sta per iniziare....
             </Typography>*/}
             {<Typography variant={"h6"} color={`gray`}>
-                @Teatro Coccia, Novara
+                {showData?.location}
             </Typography>}
             {<Typography variant={"subtitle1"} color={`gray`}>
-                14 Aprile 2023, Ore 21:00
+                {showData?.when}
             </Typography>}
             {<Typography variant={"subtitle1"} color={`gray`} fontWeight={900}>
                 Portate le cuffie!
             </Typography>}
             <Button component={Link} to="/main"
-                    endIcon={<Start/>} variant={'outlined'}
+                    endIcon={<Start/>} variant={'contained'}
                     //disabled={Date.now() <= new Date(2022, 5, 3)}
                     //TODO: RICORDA DI TOGLIERE IL DISABLED
-                    //disabled
+                    disabled={!showData?.isPlaying}
                     style={{marginTop: '8%'}} size={'large'}>
                 ENTRA
             </Button>
@@ -69,9 +74,9 @@ const WaitingRoom = () => {
                         rel="noopener noreferrer">
                     </a>*/}
                 <Button component={Link} to="/">Powered by GOMBOC</Button>
-                {<Typography gutterBottom variant={"caption"} color={`gray`} fontWeight={900}>
+                {/*<Typography gutterBottom variant={"caption"} color={`gray`} fontWeight={900}>
                     NU ARTS AND COMMUNITY
-                </Typography>}
+                </Typography>*/}
             </Box>
         </Box>
     )
