@@ -1,5 +1,17 @@
 import {muiTheme} from "../theme";
-import {Avatar, Box, Button, Chip, IconButton, Paper, Stack, TextField, Tooltip, Typography} from "@mui/material";
+import {
+    Avatar,
+    Box,
+    Button,
+    Chip,
+    IconButton,
+    Paper,
+    Stack,
+    TextField,
+    Tooltip,
+    Typography,
+    useMediaQuery, useTheme
+} from "@mui/material";
 import React, {useEffect, useState} from "react";
 import {Actors} from "../stages/Main";
 import {ContentCopy, Lock, LockOpen, PlayCircle, Save} from "@mui/icons-material";
@@ -14,13 +26,15 @@ export const controlRoomSx = {
     alignItems: 'left',
     width: '100%',
     paddingTop: '4vh',
-    padding: 5
+    padding: 2
 }
 
 const Control = () => {
     const [romeo, romeoDataLoading, romeoDataError] = useDocumentData(firestore.doc('streamingLinks/romeo'))
     const [giulietta, giuliaDataLoading, giuliaDataError] = useDocumentData(firestore.doc('streamingLinks/giulietta'))
     const [showData, showDataLoading, showDataError] = useDocumentData(firestore.doc('config/show'))
+
+    const mobile = useMediaQuery(muiTheme.breakpoints.between("xs", "sm"));
 
     //https://youtube.com/live/Y0-RAwTYlkE?feature=share
     const links = {}
@@ -102,11 +116,15 @@ const Control = () => {
             <Typography variant={'h4'} gutterBottom color={muiTheme.palette.primary.main}>
                 Link streaming attori
             </Typography>
-            <Stack mt={2} spacing={3} width={'80%'} marginX={'auto'} component={Paper} variant={"outlined"} p={2}
+            <Stack p={2} mt={2} spacing={3} width={mobile ? '100%' : '80%'} marginX={!mobile ? 'auto' : 'inherit'}
+                   component={Paper} variant={"outlined"}
                    borderRadius={'1.5rem'} borderColor={muiTheme.palette.primary.main}
-                   color={'white'}
+                   color={'white'} flexWrap={'wrap'}
                    sx={{background: 'transparent'}}>
-                <Box display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
+                <Stack spacing={2} flexWrap={'wrap'}
+                       direction={mobile ? 'column' : 'row'}
+                       justifyContent={mobile ? 'center' : 'space-between'}
+                       alignItems={'center'}>
                     {show?.isPlaying ?
                         <StyledBadge
                             overlap="circular"
@@ -128,14 +146,16 @@ const Control = () => {
                             onClick={handlePlayShow}>
                         {show?.isPlaying ? "Blocca l'accesso" : "Consenti accesso"}
                     </Button>
-                </Box>
+                </Stack>
                 {Actors.map((actor, index) =>
                     <Stack key={actor.id} component={Paper} variant={"outlined"} p={2}
                            borderRadius={'1.5rem'} borderColor={muiTheme.palette.primary.main}
-                           color={'white'}
+                           color={'white'} flexWrap={'wrap'}
                            sx={{background: 'transparent'}}
                            alignItems={'flex-start'} justifyContent={'left'}>
-                        <Stack direction={"row"} alignItems={'center'} justifyContent={'space-between'} width={'100%'}>
+                        <Stack direction={mobile ? 'column' : 'row'} alignItems={'center'} justifyContent={'space-between'} width={'100%'}
+                               flexWrap={'wrap'}
+                        >
                             <Avatar src={actor.img}
                                     sx={{
                                         width: 64, height: 64,
@@ -165,13 +185,14 @@ const Control = () => {
                             {state[actor.id].link &&
                                 <ReactPlayer url={getLink(actor.id)}
                                              controls={true}
-                                             muted={false}
+                                             muted={true}
                                              playing={true}
                                              width={'200px'}
                                              height={'100px'}
                                 />}
                         </Stack>
-                        <Stack mt={3} direction={'row'} marginLeft={'auto'} alignItems={'center'} spacing={1}>
+                        <Stack mt={3} direction={mobile ? 'column' : 'row'} marginLeft={'auto'} alignItems={'center'} spacing={1}
+                               flexWrap={'wrap'}>
                             <Chip label={'Embed Link'} color={'primary'}
                                   variant={!state[actor.id].code || state[actor.id].code?.length !== 11 ? 'outlined' : 'standard'}
                                   size={'small'}/>
@@ -212,7 +233,7 @@ const Control = () => {
 
                     </Stack>)}
             </Stack>
-            <Stack mt={4} spacing={3} width={'80%'} marginX={'auto'}
+            <Stack marginY={3} width={mobile ? '100%' : '80%'} marginX={!mobile ? 'auto' : 'inherit'}
                    component={Paper} variant={"outlined"} p={2}
                    borderRadius={'1.5rem'} borderColor={muiTheme.palette.primary.main}
                    color={'white'}
