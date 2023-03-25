@@ -36,7 +36,7 @@ const WaitingRoom = () => {
             <Typography gutterBottom variant={"h4"} color={`gray`} paddingX={1}>
                 {showData?.name}
             </Typography>
-            <img src={'/cover.jpeg'} width={'310px'}
+            <img src={'/cover_coccia.jpeg'} width={'310px'}
                  style={{
                      filter: `opacity(0.75)`,
                      borderRadius: '20px',
