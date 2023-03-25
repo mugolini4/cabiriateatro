@@ -18,7 +18,7 @@
         "headers": [
           {
             "key": "Cache-Control",
-            "value": "no-cache"
+            "value": "14400"
           }
         ]
       }
