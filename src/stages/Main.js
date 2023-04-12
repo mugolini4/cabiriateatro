@@ -32,7 +32,7 @@ const Streaming = ({followedActor}) => {
     const [actorData, actorDataLoading, actorDataError] = useDocumentData(firestore.doc('streamingLinks/'+followedActor.id))
 
     const actorLink = useMemo(() => {
-        if(!actorData)
+        if(!actorData || !actorData.isPlaying)
             return null
         return `https://www.youtube.com/embed/${actorData?.streamingString}?autoplay=1&mute=0`
     }, [actorData])
@@ -47,11 +47,21 @@ const Streaming = ({followedActor}) => {
                      frameBorder="0"
                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                      allowFullScreen/>*/}
-            {<ReactPlayer url={actorLink}
+            {actorLink ? <ReactPlayer url={actorLink}
                           controls={true}
                           playing={true}
                           width={'100%'}
-            />}
+            /> :
+                <Box position={'relative'}>
+                    <img src={followedActor.img}/>
+                    <Box position={'absolute'} bottom={100} left={0} right={0}
+                         sx={{transform: 'rotate(-10deg)'}}
+                    >
+                        <Typography variant={'h2'} fontWeight={'bold'}>
+                            Tra poco...
+                        </Typography>
+                    </Box>
+                </Box>}
         </Box>
     );
 }

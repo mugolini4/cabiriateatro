@@ -10,11 +10,11 @@ import {
     TextField,
     Tooltip,
     Typography,
-    useMediaQuery, useTheme
+    useMediaQuery
 } from "@mui/material";
 import React, {useEffect, useState} from "react";
 import {Actors} from "../stages/Main";
-import {ContentCopy, Lock, LockOpen, PlayCircle, Save} from "@mui/icons-material";
+import {ContentCopy, Lock, LockOpen, PlayCircle, Save, StopCircle} from "@mui/icons-material";
 import {firestore} from "../firebase_config";
 import {useDocumentData} from "react-firebase-hooks/firestore";
 import StyledBadge from "./StyledBadge";
@@ -57,11 +57,13 @@ const Control = () => {
             setState({
                 giulietta: {
                     code: giulietta.streamingString,
-                    link: giulietta.link
+                    link: giulietta.link,
+                    isPlaying: giulietta.isPlaying
                 },
                 romeo: {
                     code: romeo.streamingString,
-                    link: romeo.link
+                    link: romeo.link,
+                    isPlaying: romeo.isPlaying
                 }
             })
     }, [romeo, giulietta])
@@ -89,7 +91,16 @@ const Control = () => {
         firestore.collection('streamingLinks').doc(actorId).set(
             {
                 link: state[actorId].link,
-                streamingString: state[actorId].code
+                streamingString: state[actorId].code,
+                isPlaying: true
+            }, {merge: true}
+        ).then()
+    }
+
+    function handleStopActor(actorId) {
+        firestore.collection('streamingLinks').doc(actorId).set(
+            {
+                isPlaying: false
             }, {merge: true}
         ).then()
     }
@@ -153,7 +164,8 @@ const Control = () => {
                            color={'white'} flexWrap={'wrap'}
                            sx={{background: 'transparent'}}
                            alignItems={'flex-start'} justifyContent={'left'}>
-                        <Stack direction={mobile ? 'column' : 'row'} alignItems={'center'} justifyContent={'space-between'} width={'100%'}
+                        <Stack direction={mobile ? 'column' : 'row'} alignItems={'center'}
+                               justifyContent={'space-between'} width={'100%'}
                                flexWrap={'wrap'}
                         >
                             <Avatar src={actor.img}
@@ -182,16 +194,31 @@ const Control = () => {
                                        value={state[actor.id].link}
                                        onChange={(event) => handleChange(event)}
                                        type={'text'}/>
-                            {state[actor.id].link &&
-                                <ReactPlayer url={getLink(actor.id)}
-                                             controls={true}
-                                             muted={true}
-                                             playing={true}
-                                             width={'200px'}
-                                             height={'100px'}
-                                />}
+                            <Stack pt={1} marginX={'auto'}>
+                                <Typography>Preview</Typography>
+                                {state[actor.id].link && state[actor.id].isPlaying ?
+                                    <ReactPlayer url={getLink(actor.id)}
+                                                 controls={true}
+                                                 muted={true}
+                                                 playing={true}
+                                                 width={'200px'}
+                                                 height={'100px'}
+                                    /> :
+                                    <Box position={'relative'}>
+                                        <img src={actor.img} style={{maxWidth: '200px', maxHeight: '100px'}}/>
+                                        <Box position={'absolute'} bottom={15} left={0} right={0}
+                                             sx={{transform: 'rotate(-5deg)'}}
+                                        >
+                                            <Typography>
+                                                Tra poco...
+                                            </Typography>
+                                        </Box>
+                                    </Box>
+                                }
+                            </Stack>
                         </Stack>
-                        <Stack mt={3} direction={mobile ? 'column' : 'row'} marginLeft={'auto'} alignItems={'center'} spacing={1}
+                        <Stack mt={3} direction={mobile ? 'column' : 'row'} marginLeft={'auto'} alignItems={'center'}
+                               spacing={1}
                                flexWrap={'wrap'}>
                             <Chip label={'Embed Link'} color={'primary'}
                                   variant={!state[actor.id].code || state[actor.id].code?.length !== 11 ? 'outlined' : 'standard'}
@@ -218,6 +245,17 @@ const Control = () => {
                                     >
                                         <ContentCopy/>
                                     </IconButton>
+                                </Tooltip>
+                                <Tooltip title={'Togli il player di ' + actor.name + ' e metti la cover'}>
+                                    <span>
+                                        <IconButton variant={'contained'}
+                                                    sx={{color: muiTheme.palette.primary.main}}
+                                                    onClick={() => handleStopActor(actor.id)}
+                                            //disabled={!state[actor.id].code || state[actor.id].code?.length !== 11}
+                                        >
+                                            <StopCircle/>
+                                        </IconButton>
+                                    </span>
                                 </Tooltip>
                                 <Tooltip title={'Mandando il link live l\'app aggiornerà il player di ' + actor.name}>
                                     <span>
