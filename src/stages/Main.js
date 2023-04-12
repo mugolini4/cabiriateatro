@@ -55,11 +55,13 @@ const Streaming = ({followedActor}) => {
                 />}
             {actorData?.isPlaying === false &&
                 <Box position={'relative'}>
-                    <img src={followedActor.img}/>
-                    <Box position={'absolute'} bottom={100} left={0} right={0}
+                    <img src={followedActor.img} style={{maxWidth: '100%'}}/>
+                    <Box position={'absolute'} top={30} left={0} right={0}
                          sx={{transform: 'rotate(-10deg)'}}
                     >
-                        <Typography variant={'h2'} fontWeight={'bold'}>
+                        <Typography variant={'h4'} fontWeight={'bold'} color={'primary'}
+                                    sx={{textShadow: `2px 2px #000000`}}
+                        >
                             Tra poco...
                         </Typography>
                     </Box>
@@ -82,7 +84,7 @@ const MainStage = ({show}) => {
     return (
         <Stack p={2} sx={{height: '70vh', backgroundColor: 'black'}} justifyContent={'center'}>
             {followedActor && <Streaming followedActor={followedActor}/>}
-            <Box px={2} position={"fixed"} bottom={40} left={0} right={0}>
+            <Box px={2} position={"fixed"} bottom={20} left={0} right={0}>
                 <Typography gutterBottom color={`lightgray`}>
                     {'Scegli chi vuoi spiare...'}
                 </Typography>
