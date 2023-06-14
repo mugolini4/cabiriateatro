@@ -12,20 +12,12 @@ import {firestore} from "../firebase_config";
  * */
 export const Actors = [
     {
-        id: 'romeo',
-        name: 'Romeo',
+        id: 'inMacchina',
+        name: '',
         timeout: 1700,
-        img: '/Romeo.jpeg',
+        img: '/in_macchina_cover_2.webp',
         link: `https://www.youtube.com/embed/kmFdwPYOlYw?autoplay=1&mute=0`
-    },
-    {
-        id: 'giulietta',
-        name: 'Giulia',
-        timeout: 3200,
-        img: '/Giulietta.jpeg',
-        link: `https://www.youtube.com/embed/CCdlDNtc4hc?autoplay=1&mute=0`,
-    //{name: 'Giulia', timeout: 3200, link: `https://www.youtube.com/embed/channel/UCMesJQDqxYkz7rLNZv2adNg/live`
-    },
+    }
 ]
 
 const Streaming = ({followedActor}) => {
@@ -71,7 +63,7 @@ const Streaming = ({followedActor}) => {
 }
 
 const MainStage = ({show}) => {
-    const [followedActor, toggleFollowedActor] = useState(undefined)
+    const [followedActor, toggleFollowedActor] = useState(Actors[0])
 
     const handleChangeActor = (index) => {
         toggleFollowedActor(Actors[index])
@@ -86,7 +78,7 @@ const MainStage = ({show}) => {
             {followedActor && <Streaming followedActor={followedActor}/>}
             <Box px={2} position={"fixed"} bottom={20} left={0} right={0}>
                 <Typography gutterBottom color={`lightgray`}>
-                    {'Scegli chi vuoi spiare...'}
+                    {'Spiali...'}
                 </Typography>
                 <Stack direction={'row'} justifyContent={'space-evenly'} alignItems={'center'}>
                     {Object.values(Actors).map((actor, index) =>

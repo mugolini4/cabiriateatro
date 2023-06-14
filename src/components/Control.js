@@ -30,8 +30,7 @@ export const controlRoomSx = {
 }
 
 const Control = () => {
-    const [romeo, romeoDataLoading, romeoDataError] = useDocumentData(firestore.doc('streamingLinks/romeo'))
-    const [giulietta, giuliaDataLoading, giuliaDataError] = useDocumentData(firestore.doc('streamingLinks/giulietta'))
+    const [inMacchina, inMacchinaLoading, inMacchinaError] = useDocumentData(firestore.doc('streamingLinks/inMacchina'))
     const [showData, showDataLoading, showDataError] = useDocumentData(firestore.doc('config/show'))
 
     const mobile = useMediaQuery(muiTheme.breakpoints.between("xs", "sm"));
@@ -53,20 +52,15 @@ const Control = () => {
     }, [showData])
 
     useEffect(() => {
-        if (romeo && giulietta)
+        if (inMacchina)
             setState({
-                giulietta: {
-                    code: giulietta.streamingString,
-                    link: giulietta.link,
-                    isPlaying: giulietta.isPlaying
-                },
-                romeo: {
-                    code: romeo.streamingString,
-                    link: romeo.link,
-                    isPlaying: romeo.isPlaying
+                inMacchina: {
+                    code: inMacchina.streamingString,
+                    link: inMacchina.link,
+                    isPlaying: inMacchina.isPlaying
                 }
             })
-    }, [romeo, giulietta])
+    }, [inMacchina])
 
     function getCodeLink(link) {
         let streamingCode = link?.split('live/')[1]
