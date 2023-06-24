@@ -4,7 +4,8 @@ import {muiTheme} from "../theme";
 import StyledBadge from "../components/StyledBadge";
 import ReactPlayer from "react-player";
 import {useDocumentData} from "react-firebase-hooks/firestore";
-import {firestore} from "../firebase_config";
+import {auth, firestore} from "../firebase_config";
+import {useNavigate} from "react-router-dom";
 
 /** query params in yt url ?
  * controls=0 -> frame con i controlli
@@ -71,6 +72,15 @@ const Streaming = ({followedActor}) => {
 }
 
 const MainStage = ({show}) => {
+    const navigate = useNavigate()
+    const [showData, showDataLoading, ] = useDocumentData(firestore.doc('config/show'))
+
+    useEffect(() => {
+        if(showData?.isPlaying === false && !auth.currentUser) {
+            navigate('/')
+        }
+    }, [showData, auth])
+
     const [followedActor, toggleFollowedActor] = useState(undefined)
 
     const handleChangeActor = (index) => {
