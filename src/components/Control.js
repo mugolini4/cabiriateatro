@@ -1,5 +1,6 @@
-import {muiTheme} from "../theme";
+import {BACKGROUND, muiTheme} from "../theme";
 import {
+    alpha,
     Avatar,
     Box,
     Button,
@@ -14,7 +15,17 @@ import {
 } from "@mui/material";
 import React, {useEffect, useState} from "react";
 import {Actors} from "../stages/Main";
-import {ContentCopy, Lock, LockOpen, PlayCircle, Save, StopCircle} from "@mui/icons-material";
+import {
+    ContentCopy,
+    Lock,
+    LockOpen,
+    PlayCircle,
+    Reviews,
+    Save,
+    SpeakerNotesOff,
+    SpeakerNotesOffOutlined,
+    StopCircle
+} from "@mui/icons-material";
 import {firestore} from "../firebase_config";
 import {useDocumentData} from "react-firebase-hooks/firestore";
 import StyledBadge from "./StyledBadge";
@@ -30,8 +41,8 @@ export const controlRoomSx = {
 }
 
 const Control = () => {
-    const [romeo, romeoDataLoading, romeoDataError] = useDocumentData(firestore.doc('streamingLinks/romeo'))
-    const [giulietta, giuliaDataLoading, giuliaDataError] = useDocumentData(firestore.doc('streamingLinks/giulietta'))
+    const [amleto, amletoDataLoading, amletoDataError] = useDocumentData(firestore.doc('streamingLinks/amleto'))
+    const [ofelia, ofeliaDataLoading, ofeliaDataError] = useDocumentData(firestore.doc('streamingLinks/ofelia'))
     const [showData, showDataLoading, showDataError] = useDocumentData(firestore.doc('config/show'))
 
     const mobile = useMediaQuery(muiTheme.breakpoints.between("xs", "sm"));
@@ -53,20 +64,20 @@ const Control = () => {
     }, [showData])
 
     useEffect(() => {
-        if (romeo && giulietta)
+        if (amleto && ofelia)
             setState({
-                giulietta: {
-                    code: giulietta.streamingString,
-                    link: giulietta.link,
-                    isPlaying: giulietta.isPlaying
+                ofelia: {
+                    code: ofelia.streamingString,
+                    link: ofelia.link,
+                    isPlaying: ofelia.isPlaying
                 },
-                romeo: {
-                    code: romeo.streamingString,
-                    link: romeo.link,
-                    isPlaying: romeo.isPlaying
+                amleto: {
+                    code: amleto.streamingString,
+                    link: amleto.link,
+                    isPlaying: amleto.isPlaying
                 }
             })
-    }, [romeo, giulietta])
+    }, [amleto, ofelia])
 
     function getCodeLink(link) {
         let streamingCode = link?.split('live/')[1]
@@ -95,6 +106,12 @@ const Control = () => {
                 isPlaying: true
             }, {merge: true}
         ).then()
+    }
+
+    function handleOpenInteraction() {
+        firestore.collection('config').doc('show').set({
+            openInteraction: !show?.openInteraction
+        }, {merge: true}).then()
     }
 
     function handleStopActor(actorId) {
@@ -159,7 +176,7 @@ const Control = () => {
                     </Button>
                 </Stack>
                 {Actors.map((actor, index) =>
-                    <Stack key={actor.id} component={Paper} variant={"outlined"} p={2}
+                    <Stack key={actor?.id} component={Paper} variant={"outlined"} p={2}
                            borderRadius={'1.5rem'} borderColor={muiTheme.palette.primary.main}
                            color={'white'} flexWrap={'wrap'}
                            sx={{background: 'transparent'}}
@@ -191,21 +208,28 @@ const Control = () => {
                                            borderRadius: '1rem',
                                            boxShadow: 'none',
                                        }}
-                                       value={state[actor.id].link}
+                                       value={state[actor?.id]?.link}
                                        onChange={(event) => handleChange(event)}
                                        type={'text'}/>
-                            <Stack pt={1} marginX={'auto'}>
+                            <Stack py={2} marginX={'auto'} alignItems={'center'}
+                                   borderRadius={'1.5rem'}
+                                   borderColor={muiTheme.palette.secondary.main}
+                                   variant={"outlined"}
+                                   color={'white'}
+                                   sx={{background: 'black'}}
+                                   component={Paper}
+                            >
                                 <Typography>Preview</Typography>
-                                {state[actor.id].link && state[actor.id].isPlaying ?
-                                    <ReactPlayer url={getLink(actor.id)}
+                                {state[actor?.id]?.link && state[actor?.id]?.isPlaying ?
+                                    <ReactPlayer url={getLink(actor?.id)}
                                                  controls={true}
                                                  muted={true}
                                                  playing={true}
-                                                 width={'200px'}
-                                                 height={'100px'}
+                                                 width={'150px'}
+                                                 height={'150px'}
                                     /> :
                                     <Box position={'relative'}>
-                                        <img src={actor.img} style={{maxWidth: '200px', maxHeight: '100px'}}/>
+                                        <img src={actor?.img} style={{maxWidth: '200px', maxHeight: '150px'}}/>
                                         <Box position={'absolute'} bottom={15} left={0} right={0}
                                              sx={{transform: 'rotate(-5deg)'}}
                                         >
@@ -215,13 +239,31 @@ const Control = () => {
                                         </Box>
                                     </Box>
                                 }
+                                {
+                                    actor?.id === 'amleto' ?
+                                        show?.openInteraction ?
+                                            <Tooltip title={'Disattiva interazione'}>
+                                                <IconButton sx={{background: muiTheme.palette.primary.main}}
+                                                        onClick={handleOpenInteraction}>
+                                                    <Reviews sx={{color: BACKGROUND}}/>
+                                                </IconButton>
+                                            </Tooltip>
+                                            :
+                                            <Tooltip title={'Attiva interazione'}>
+                                                <IconButton sx={{background: alpha(muiTheme.palette.primary.main, 0.5)}}
+                                                      onClick={handleOpenInteraction}>
+                                                    <SpeakerNotesOffOutlined sx={{color: BACKGROUND}}/>
+                                                </IconButton>
+                                            </Tooltip>
+                                        : null
+                                }
                             </Stack>
                         </Stack>
                         <Stack mt={3} direction={mobile ? 'column' : 'row'} marginLeft={'auto'} alignItems={'center'}
                                spacing={1}
                                flexWrap={'wrap'}>
                             <Chip label={'Embed Link'} color={'primary'}
-                                  variant={!state[actor.id].code || state[actor.id].code?.length !== 11 ? 'outlined' : 'standard'}
+                                  variant={!state[actor?.id]?.code || state[actor?.id]?.code?.length !== 11 ? 'outlined' : 'standard'}
                                   size={'small'}/>
                             <Box>
                                 <Typography textAlign={'center'} color={'white'} variant={'subtitle2'} flexWrap={'wrap'}
@@ -229,10 +271,10 @@ const Control = () => {
                                 >
                                     <a
                                         className="App-link"
-                                        href={getLink(actor.id)}
+                                        href={getLink(actor?.id)}
                                         target="_blank"
                                         rel="noopener noreferrer">
-                                        {getLink(actor.id)}
+                                        {getLink(actor?.id)}
                                     </a>
                                 </Typography>
                             </Box>
@@ -240,32 +282,43 @@ const Control = () => {
                                 <Tooltip title={'Copia link da embeddare'}>
                                     <IconButton variant={'contained'}
                                                 sx={{color: muiTheme.palette.primary.main}}
-                                                disabled={!state[actor.id].code || state[actor.id].code?.length !== 11}
-                                                onClick={() => copyLink(getLink(actor.id))}
+                                                disabled={!state[actor?.id]?.code || state[actor?.id]?.code?.length !== 11}
+                                                onClick={() => copyLink(getLink(actor?.id))}
                                     >
                                         <ContentCopy/>
                                     </IconButton>
                                 </Tooltip>
-                                <Tooltip title={'Togli il player di ' + actor.name + ' e metti la cover'}>
+                                <Tooltip title={'Togli il player di ' + actor?.name + ' e metti la cover'}>
                                     <span>
                                         <IconButton variant={'contained'}
                                                     sx={{color: muiTheme.palette.primary.main}}
-                                                    onClick={() => handleStopActor(actor.id)}
+                                                    onClick={() => handleStopActor(actor?.id)}
                                             //disabled={!state[actor.id].code || state[actor.id].code?.length !== 11}
                                         >
                                             <StopCircle/>
                                         </IconButton>
                                     </span>
                                 </Tooltip>
-                                <Tooltip title={'Mandando il link live l\'app aggiornerà il player di ' + actor.name}>
+                                <Tooltip title={'Mandando il link live l\'app aggiornerà il player di ' + actor?.name}>
                                     <span>
                                         <Button variant={'contained'} fullWidth startIcon={<PlayCircle/>}
-                                                onClick={() => handlePlayLiveLink(actor.id)}
-                                                disabled={!state[actor.id].code || state[actor.id].code?.length !== 11}>
+                                                size={'small'}
+                                                onClick={() => handlePlayLiveLink(actor?.id)}
+                                                disabled={!state[actor?.id]?.code || state[actor?.id]?.code?.length !== 11}>
                                             Play
                                         </Button>
                                     </span>
                                 </Tooltip>
+                                {actor?.id === 'amleto' &&
+                                    <span>
+                                    <Button variant={show?.openInteraction ? 'contained' : 'outlined'}
+                                            fullWidth
+                                            startIcon={show?.openInteraction ? <SpeakerNotesOff/> : <Reviews/>}
+                                            size={'small'}
+                                            onClick={() => handleOpenInteraction()}>
+                                        {`${show?.openInteraction ? 'DISATTIVA' : 'ATTIVA'} interazione pubblico`}
+                                    </Button>
+                                </span>}
                             </Stack>
                         </Stack>
 

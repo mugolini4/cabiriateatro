@@ -1,11 +1,22 @@
 import React, {useEffect, useMemo, useState} from "react";
-import {Avatar, Box, Button, Grow, Stack, Typography} from "@mui/material";
+import {
+    Accordion,
+    AccordionDetails,
+    AccordionSummary,
+    Avatar,
+    Box,
+    Button,
+    Grow,
+    Stack,
+    Typography
+} from "@mui/material";
 import {muiTheme} from "../theme";
 import StyledBadge from "../components/StyledBadge";
 import ReactPlayer from "react-player";
 import {useDocumentData} from "react-firebase-hooks/firestore";
 import {auth, firestore} from "../firebase_config";
 import {useNavigate} from "react-router-dom";
+import {ExpandMore} from "@mui/icons-material";
 
 /** query params in yt url ?
  * controls=0 -> frame con i controlli
@@ -13,15 +24,15 @@ import {useNavigate} from "react-router-dom";
  * */
 export const Actors = [
     {
-        id: 'romeo',
-        name: 'Romeo',
+        id: 'amleto',
+        name: 'Amleto',
         timeout: 1700,
         img: '/Romeo.jpeg',
         link: `https://www.youtube.com/embed/kmFdwPYOlYw?autoplay=1&mute=0`
     },
     {
-        id: 'giulietta',
-        name: 'Giulia',
+        id: 'ofelia',
+        name: 'Ofelia',
         timeout: 3200,
         img: '/Giulietta.jpeg',
         link: `https://www.youtube.com/embed/CCdlDNtc4hc?autoplay=1&mute=0`,
@@ -71,6 +82,42 @@ const Streaming = ({followedActor}) => {
     );
 }
 
+function SlidoInteraction() {
+    const [showData] = useDocumentData(firestore.doc('config/show'))
+
+    const [openSlido, setOpenSlido] = useState(false)
+
+    return showData?.openInteraction &&
+        <Grow in={showData?.openInteraction === true} timeout={500}>
+            <Box position={"absolute"} top={8} left={8} right={8} zIndex={100}>
+        <Accordion expanded={openSlido} onChange={() => setOpenSlido(!openSlido)}
+                   sx={{
+                       backgroundColor: muiTheme.palette.primary.main,
+                       color: 'white',
+                       fontWeight: 'bold',
+                   }}
+                   style={{
+                       borderRadius: '2rem'
+                   }}
+        >
+            <AccordionSummary
+                expandIcon={<ExpandMore />}
+            >
+                Interagisci con la diretta ❤️👍
+            </AccordionSummary>
+            <AccordionDetails>
+                <iframe //src="https://ortometraggi.2ndStage.app"
+                        src="https://app.sli.do/event/9Lrf4S2smDM56Eq5UVeAJj"
+                        height="100%" width="100%"
+                        frameBorder="0"
+                        style={{minHeight: '520px', borderRadius: '1rem'}}
+                        title="Amleto"></iframe>
+            </AccordionDetails>
+        </Accordion>
+    </Box>
+        </Grow>
+}
+
 const MainStage = ({show}) => {
     const navigate = useNavigate()
     const [showData, showDataLoading, ] = useDocumentData(firestore.doc('config/show'))
@@ -93,6 +140,7 @@ const MainStage = ({show}) => {
 
     return (
         <Stack p={2} sx={{height: '70vh', backgroundColor: 'black'}} justifyContent={'center'}>
+            {followedActor?.id === 'amleto' && <SlidoInteraction/>}
             {followedActor && <Streaming followedActor={followedActor}/>}
             <Box px={2} position={"fixed"} bottom={20} left={0} right={0}>
                 <Typography gutterBottom color={`lightgray`}>
