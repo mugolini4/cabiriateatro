@@ -7,7 +7,7 @@ import {
     Chip,
     IconButton,
     Paper,
-    Stack,
+    Stack, Switch,
     TextField,
     Tooltip,
     Typography,
@@ -69,12 +69,14 @@ const Control = () => {
                 ofelia: {
                     code: ofelia.streamingString,
                     link: ofelia.link,
-                    isPlaying: ofelia.isPlaying
+                    isPlaying: ofelia.isPlaying,
+                    disabled: ofelia.disabled
                 },
                 amleto: {
                     code: amleto.streamingString,
                     link: amleto.link,
-                    isPlaying: amleto.isPlaying
+                    isPlaying: amleto.isPlaying,
+                    disabled: amleto.disabled
                 }
             })
     }, [amleto, ofelia])
@@ -109,15 +111,26 @@ const Control = () => {
     }
 
     function handleOpenInteraction() {
+        /** PERMETTE L'INTERAZIONE CON IL PUBBLICO */
         firestore.collection('config').doc('show').set({
             openInteraction: !show?.openInteraction
         }, {merge: true}).then()
     }
 
     function handleStopActor(actorId) {
+        /** METTE LA COVER INVECE CHE IL VIDEO LIVE */
         firestore.collection('streamingLinks').doc(actorId).set(
             {
                 isPlaying: false
+            }, {merge: true}
+        ).then()
+    }
+
+    function handleDisableActor(actorId, checked) {
+        /** TOGLIE L'ATTORE DALLA SCELTA */
+        firestore.collection('streamingLinks').doc(actorId).set(
+            {
+                disabled: !checked
             }, {merge: true}
         ).then()
     }
@@ -191,6 +204,11 @@ const Control = () => {
                                         marginRight: 3,
                                         boxShadow: `5px 8px 18px 0px ${muiTheme.palette.secondary.main}`
                                     }}/>
+                            <Switch
+                                checked={!state[actor?.id].disabled}
+                                onChange={(event, checked) => handleDisableActor(actor?.id, checked)}
+                                inputProps={{ 'aria-label': 'controlled' }}
+                            />
                             <TextField variant={'standard'}
                                        size={'small'}
                                        fullWidth

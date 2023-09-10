@@ -106,12 +106,19 @@ function SlidoInteraction() {
                 Interagisci con la diretta ❤️👍
             </AccordionSummary>
             <AccordionDetails>
-                <iframe //src="https://ortometraggi.2ndStage.app"
+                <iframe src="https://app.sli.do/event/wRVrJ5g1JWtQ1xp4JpMjdi"
+                        height="100%"
+                        width="100%"
+                        frameBorder="0"
+                        style={{minHeight: '520px', borderRadius: '1rem'}}
+                        title="Amleto">
+                </iframe>
+                {/* MATI: <iframe //src="https://ortometraggi.2ndStage.app"
                         src="https://app.sli.do/event/9Lrf4S2smDM56Eq5UVeAJj"
                         height="100%" width="100%"
                         frameBorder="0"
                         style={{minHeight: '520px', borderRadius: '1rem'}}
-                        title="Amleto"></iframe>
+                        title="Amleto"></iframe>*/}
             </AccordionDetails>
         </Accordion>
     </Box>
@@ -121,6 +128,9 @@ function SlidoInteraction() {
 const MainStage = ({show}) => {
     const navigate = useNavigate()
     const [showData, showDataLoading, ] = useDocumentData(firestore.doc('config/show'))
+
+    const [amleto, amletoDataLoading, amletoDataError] = useDocumentData(firestore.doc('streamingLinks/amleto'))
+    const [ofelia, ofeliaDataLoading, ofeliaDataError] = useDocumentData(firestore.doc('streamingLinks/ofelia'))
 
     useEffect(() => {
         if(showData?.isPlaying === false && !auth.currentUser) {
@@ -143,13 +153,17 @@ const MainStage = ({show}) => {
             {followedActor?.id === 'amleto' && <SlidoInteraction/>}
             {followedActor && <Streaming followedActor={followedActor}/>}
             <Box px={2} position={"fixed"} bottom={20} left={0} right={0}>
-                <Typography gutterBottom color={`lightgray`}>
-                    {'Scegli chi vuoi spiare...'}
-                </Typography>
+                {!ofelia?.disabled &&
+                    <Typography gutterBottom color={`lightgray`}>
+                        {'Scegli chi vuoi spiare...'}
+                    </Typography>}
                 <Stack direction={'row'} justifyContent={'space-evenly'} alignItems={'center'}>
                     {Object.values(Actors).map((actor, index) =>
+                        (actor.id === 'amleto' ? !amleto?.disabled : actor.id === 'ofelia' ? !ofelia?.disabled : false)
+                            &&
                         <Grow key={index} in={show} mountOnEnter timeout={actor.timeout}>
-                            <Box onClick={() => handleChangeActor(index)} display={'flex'} flexDirection={'column'} alignItems={'center'}>
+                                <Box onClick={() => handleChangeActor(index)}
+                                  display={'flex'} flexDirection={'column'} alignItems={'center'}>
                                 {isSelected(index) ? <StyledBadge
                                         overlap="circular"
                                         anchorOrigin={{vertical: 'bottom', horizontal: 'right'}}
@@ -168,7 +182,8 @@ const MainStage = ({show}) => {
                                               }}/>}
                                 <Button size={'large'}>{actor.name}</Button>
                             </Box>
-                        </Grow>)}
+                        </Grow>
+                    )}
                 </Stack>
             </Box>
         </Stack>
