@@ -25,16 +25,16 @@ import {ExpandMore} from "@mui/icons-material";
 export const Actors = [
     {
         id: 'amleto',
-        name: 'Amleto',
+        name: 'Antonio',
         timeout: 1700,
-        img: '/Romeo.jpeg',
+        img: '/antonio.jpeg',
         link: `https://www.youtube.com/embed/kmFdwPYOlYw?autoplay=1&mute=0`
     },
     {
         id: 'ofelia',
-        name: 'Ofelia',
+        name: 'Giulia',
         timeout: 3200,
-        img: '/Giulietta.jpeg',
+        img: '/giulia.jpeg',
         link: `https://www.youtube.com/embed/CCdlDNtc4hc?autoplay=1&mute=0`,
     //{name: 'Giulia', timeout: 3200, link: `https://www.youtube.com/embed/channel/UCMesJQDqxYkz7rLNZv2adNg/live`
     },
