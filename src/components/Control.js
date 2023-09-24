@@ -89,7 +89,7 @@ const Control = () => {
     }
 
     function getLink(actorId) {
-        return state[actorId] && state[actorId].code ? `https://www.youtube.com/embed/${state[actorId].code}?autoplay=1&mute=0` : "";
+        return state[actorId] && state[actorId].code ? `https://www.youtube.com/embed/${state[actorId].code}?autoplay=1&mute=0&allowfullscreen=0` : "";
     }
 
     function handleChange(event) {
@@ -245,6 +245,14 @@ const Control = () => {
                                                  playing={true}
                                                  width={'150px'}
                                                  height={'150px'}
+                                                 config={{
+                                                     youtube: {
+                                                         playerVars: {
+                                                             modestbranding: 1,
+                                                             fs: 0,
+                                                             showinfo:0
+                                                         }
+                                                     }}}
                                     /> :
                                     <Box position={'relative'}>
                                         <img src={actor?.img} style={{maxWidth: '200px', maxHeight: '150px'}}/>

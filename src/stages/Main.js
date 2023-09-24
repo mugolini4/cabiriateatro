@@ -16,7 +16,7 @@ import ReactPlayer from "react-player";
 import {useDocumentData} from "react-firebase-hooks/firestore";
 import {auth, firestore} from "../firebase_config";
 import {useNavigate} from "react-router-dom";
-import {ExpandMore} from "@mui/icons-material";
+import {Close, ExpandMore} from "@mui/icons-material";
 
 /** query params in yt url ?
  * controls=0 -> frame con i controlli
@@ -27,15 +27,15 @@ export const Actors = [
         id: 'amleto',
         name: 'Amleto',
         timeout: 1700,
-        img: '/Romeo.jpeg',
-        link: `https://www.youtube.com/embed/kmFdwPYOlYw?autoplay=1&mute=0`
+        img: '/amleto.jpeg',
+        link: `https://www.youtube.com/embed/kmFdwPYOlYw?autoplay=1&mute=0&allowfullscreen=0`
     },
     {
         id: 'ofelia',
         name: 'Ofelia',
         timeout: 3200,
-        img: '/Giulietta.jpeg',
-        link: `https://www.youtube.com/embed/CCdlDNtc4hc?autoplay=1&mute=0`,
+        img: '/ofelia.jpeg',
+        link: `https://www.youtube.com/embed/CCdlDNtc4hc?autoplay=1&mute=0&allowfullscreen=0`,
     //{name: 'Giulia', timeout: 3200, link: `https://www.youtube.com/embed/channel/UCMesJQDqxYkz7rLNZv2adNg/live`
     },
 ]
@@ -46,7 +46,7 @@ const Streaming = ({followedActor}) => {
     const actorLink = useMemo(() => {
         if(!actorData)
             return null
-        return `https://www.youtube.com/embed/${actorData?.streamingString}?autoplay=1&mute=0`
+        return `https://www.youtube.com/embed/${actorData?.streamingString}?autoplay=1&mute=0&allowfullscreen=0`
     }, [actorData])
 
     return (
@@ -61,9 +61,17 @@ const Streaming = ({followedActor}) => {
                      allowFullScreen/>*/}
             {actorLink && actorData?.isPlaying &&
                 <ReactPlayer url={actorLink}
-                          controls={true}
-                          playing={true}
-                          width={'100%'}
+                             controls={true}
+                             playing={true}
+                             width={'100%'}
+                             config={{
+                                 youtube: {
+                                     playerVars: {
+                                         modestbranding: 1,
+                                         fs: 0
+                                     }
+                                 }}}
+
                 />}
             {actorData?.isPlaying === false &&
                 <Box position={'relative'}>
@@ -85,7 +93,13 @@ const Streaming = ({followedActor}) => {
 function SlidoInteraction() {
     const [showData] = useDocumentData(firestore.doc('config/show'))
 
-    const [openSlido, setOpenSlido] = useState(false)
+    const [openSlido, setOpenSlido] = useState(true)
+
+    useEffect(() => {
+        if(showData?.openInteraction === false) {
+            setOpenSlido(true)
+        }
+    }, [showData?.openInteraction])
 
     return showData?.openInteraction &&
         <Grow in={showData?.openInteraction === true} timeout={500}>
@@ -101,12 +115,14 @@ function SlidoInteraction() {
                    }}
         >
             <AccordionSummary
-                expandIcon={<ExpandMore />}
+                expandIcon={openSlido ? <Close fontSize={'large'} sx={{color: 'white'}} />
+                    : <ExpandMore fontSize={'large'} sx={{color: 'white'}} />}
             >
                 Interagisci con la diretta ❤️👍
             </AccordionSummary>
             <AccordionDetails>
-                <iframe src="https://app.sli.do/event/wRVrJ5g1JWtQ1xp4JpMjdi"
+                <iframe src="https://wall.sli.do/event/wRVrJ5g1JWtQ1xp4JpMjdi?section=bfc92e9e-ad69-4600-a1e0-c465c27c67da" // present
+                        //src="https://app.sli.do/event/wRVrJ5g1JWtQ1xp4JpMjdi" //interazioni
                         height="100%"
                         width="100%"
                         frameBorder="0"
@@ -131,6 +147,13 @@ const MainStage = ({show}) => {
 
     const [amleto, amletoDataLoading, amletoDataError] = useDocumentData(firestore.doc('streamingLinks/amleto'))
     const [ofelia, ofeliaDataLoading, ofeliaDataError] = useDocumentData(firestore.doc('streamingLinks/ofelia'))
+
+    useEffect(() => {
+        if(ofelia?.disabled)
+            handleChangeActor(0)
+        else if(ofelia?.disabled === false)
+            toggleFollowedActor(undefined)
+    }, [ofelia])
 
     useEffect(() => {
         if(showData?.isPlaying === false && !auth.currentUser) {
