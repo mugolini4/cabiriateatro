@@ -48,11 +48,12 @@ const Streaming = ({followedActor}) => {
                      frameBorder="0"
                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                      allowFullScreen/>*/}
-            {actorLink && actorData?.isPlaying &&
-                <ReactPlayer url={actorLink}
-                          controls={true}
-                          playing={true}
-                          width={'100%'}
+            {actorData?.isPlaying &&
+                <ReactPlayer // url={actorLink}
+                    url={`streaming/scena9/${followedActor.id}.mp4`}
+                    controls={true}
+                    playing={true}
+                    width={'100%'}
                 />}
             {actorData?.isPlaying === false &&
                 <Box position={'relative'}>
