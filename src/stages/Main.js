@@ -17,7 +17,11 @@ export const Actors = [
         name: 'Romeo',
         timeout: 1700,
         img: '/Romeo.jpeg',
-        link: `https://www.youtube.com/embed/kmFdwPYOlYw?autoplay=1&mute=0`
+        link: `https://www.youtube.com/embed/kmFdwPYOlYw?autoplay=1&mute=0`,
+        scenes: {
+            scena3: {label: "Scena 3", id: 'scena3', file: 'streaming/scena3/romeo.mp4'},
+            scena9: {label: "Scena 9", id: 'scena9', file: 'streaming/scena9/romeo.mp4'}
+        }
     },
     {
         id: 'giulietta',
@@ -25,18 +29,52 @@ export const Actors = [
         timeout: 3200,
         img: '/Giulietta.jpeg',
         link: `https://www.youtube.com/embed/CCdlDNtc4hc?autoplay=1&mute=0`,
-    //{name: 'Giulia', timeout: 3200, link: `https://www.youtube.com/embed/channel/UCMesJQDqxYkz7rLNZv2adNg/live`
+        scenes: {
+            scena9: {label: "Scena 9", id: 'scena9', file: 'streaming/scena9/giulietta.mp4'}
+        }
+        //{name: 'Giulia', timeout: 3200, link: `https://www.youtube.com/embed/channel/UCMesJQDqxYkz7rLNZv2adNg/live`
     },
 ]
 
-const Streaming = ({followedActor}) => {
-    const [actorData, actorDataLoading, actorDataError] = useDocumentData(firestore.doc('streamingLinks/'+followedActor.id))
+export const Streaming = ({followedActor, width = "100%", height = null}) => {
+    const playerRef = React.useRef();
+    const [isReady, setIsReady] = React.useState(false);
+    const [transitionToBlack, setTransitionToBlack] = React.useState(false);
+
+    const [actorData, actorDataLoading, actorDataError] = useDocumentData(firestore.doc('recordedVideos/'+followedActor.id))
 
     const actorLink = useMemo(() => {
         if(!actorData)
             return null
         return `https://www.youtube.com/embed/${actorData?.streamingString}?autoplay=1&mute=0`
     }, [actorData])
+
+    const progressTimeSeconds = useMemo(() => {
+        if(!actorData)
+            return null
+        setIsReady(false);
+        setTransitionToBlack(false);
+
+        console.log("Date().getTime():", new Date().getTime())
+        console.log("actorData.startTime:",actorData?.startTime)
+        console.log("actorData?.startTime._seconds*1000:", new Date(actorData?.startTime?.seconds*1000))
+        console.log("progressTimeSeconds:",new Date().getTime() - new Date(actorData?.startTime?.seconds*1000))
+
+        return (new Date().getTime() - new Date(actorData?.startTime?.seconds*1000)) / 1000
+    }, [actorData])
+
+    const onReady = React.useCallback(() => {
+        console.log("progressTimeSeconds:",progressTimeSeconds)
+        if (!isReady) {
+            playerRef.current.seekTo(progressTimeSeconds, 'seconds');
+            setIsReady(true);
+        }
+    }, [isReady, progressTimeSeconds]);
+
+    const onEnded = React.useCallback(() => {
+        console.log("progressTimeSeconds:",progressTimeSeconds)
+        setTransitionToBlack(true)
+    }, [isReady, progressTimeSeconds]);
 
     return (
         <Box py={2}>
@@ -48,14 +86,20 @@ const Streaming = ({followedActor}) => {
                      frameBorder="0"
                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                      allowFullScreen/>*/}
-            {actorData?.isPlaying &&
+            {(actorData?.isPlaying && !transitionToBlack) ?
                 <ReactPlayer // url={actorLink}
-                    url={`streaming/scena9/${followedActor.id}.mp4`}
+                    //url={`streaming/scena9/${followedActor.id}.mp4`}
+                    ref={playerRef}
+                    url={actorData.video}
                     controls={true}
+                    muted={true}
                     playing={true}
-                    width={'100%'}
-                />}
-            {actorData?.isPlaying === false &&
+                    onReady={onReady}
+                    onEnded={onEnded}
+                    width={width}
+                    height={height}
+                /> : null}
+            {(actorData?.isPlaying === false) &&
                 <Box position={'relative'}>
                     <img src={followedActor.img} style={{maxWidth: '100%'}}/>
                     <Box position={'absolute'} top={30} left={0} right={0}

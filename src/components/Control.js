@@ -13,8 +13,8 @@ import {
     useMediaQuery
 } from "@mui/material";
 import React, {useEffect, useState} from "react";
-import {Actors} from "../stages/Main";
-import {ContentCopy, Lock, LockOpen, PlayCircle, Save, StopCircle} from "@mui/icons-material";
+import {Actors, Streaming} from "../stages/Main";
+import {Lock, LockOpen, PlayCircle, Save, StopCircle} from "@mui/icons-material";
 import {firestore} from "../firebase_config";
 import {useDocumentData} from "react-firebase-hooks/firestore";
 import StyledBadge from "./StyledBadge";
@@ -30,8 +30,8 @@ export const controlRoomSx = {
 }
 
 const Control = () => {
-    const [romeo, romeoDataLoading, romeoDataError] = useDocumentData(firestore.doc('streamingLinks/romeo'))
-    const [giulietta, giuliaDataLoading, giuliaDataError] = useDocumentData(firestore.doc('streamingLinks/giulietta'))
+    const [romeo, romeoDataLoading, romeoDataError] = useDocumentData(firestore.doc('recordedVideos/romeo'))
+    const [giulietta, giuliaDataLoading, giuliaDataError] = useDocumentData(firestore.doc('recordedVideos/giulietta'))
     const [showData, showDataLoading, showDataError] = useDocumentData(firestore.doc('config/show'))
 
     const mobile = useMediaQuery(muiTheme.breakpoints.between("xs", "sm"));
@@ -56,14 +56,14 @@ const Control = () => {
         if (romeo && giulietta)
             setState({
                 giulietta: {
-                    code: giulietta.streamingString,
-                    link: giulietta.link,
-                    isPlaying: giulietta.isPlaying
+                    video: giulietta.video,
+                    isPlaying: giulietta.isPlaying,
+                    sceneId: giulietta.sceneId
                 },
                 romeo: {
-                    code: romeo.streamingString,
-                    link: romeo.link,
-                    isPlaying: romeo.isPlaying
+                    video: romeo.video,
+                    isPlaying: romeo.isPlaying,
+                    sceneId: romeo.sceneId
                 }
             })
     }, [romeo, giulietta])
@@ -97,8 +97,21 @@ const Control = () => {
         ).then()
     }
 
+    function handlePlayRecordedVideo(actorId, sceneId) {
+        firestore.collection('recordedVideos').doc(actorId).set(
+            {
+                sceneId: sceneId,
+                video: Actors.find((o) => {
+                    return o.id === actorId
+                })?.scenes[sceneId].file,
+                isPlaying: true,
+                startTime: new Date()
+            }, {merge: true}
+        ).then()
+    }
+
     function handleStopActor(actorId) {
-        firestore.collection('streamingLinks').doc(actorId).set(
+        firestore.collection('recordedVideos').doc(actorId).set(
             {
                 isPlaying: false
             }, {merge: true}
@@ -165,8 +178,7 @@ const Control = () => {
                            sx={{background: 'transparent'}}
                            alignItems={'flex-start'} justifyContent={'left'}>
                         <Stack direction={mobile ? 'column' : 'row'} alignItems={'center'}
-                               justifyContent={'space-between'} width={'100%'}
-                               flexWrap={'wrap'}
+                               width={'100%'}
                         >
                             <Avatar src={actor.img}
                                     sx={{
@@ -174,101 +186,85 @@ const Control = () => {
                                         marginRight: 3,
                                         boxShadow: `5px 8px 18px 0px ${muiTheme.palette.secondary.main}`
                                     }}/>
-                            <TextField variant={'standard'}
-                                       size={'small'}
-                                       fullWidth
-                                       id={actor.id}
-                                       placeholder={'Link diretta YouTube live'}
-                                       helperText={'Link diretta YouTube live'}
-                                       sx={{
-                                           '.MuiInput-root': {
-                                               color: 'white',
-                                           },
-                                           '& .MuiInput-underline:before': {borderBottomColor: muiTheme.palette.primary.main},
-                                           '& .MuiInput-underline:after': {borderBottomColor: muiTheme.palette.primary.main},
-                                           '& .MuiFormHelperText-root': {color: muiTheme.palette.primary.main},
-                                           background: 'transparent',
-                                           borderRadius: '1rem',
-                                           boxShadow: 'none',
-                                       }}
-                                       value={state[actor.id].link}
-                                       onChange={(event) => handleChange(event)}
-                                       type={'text'}/>
-                            <Stack pt={1} marginX={'auto'}>
-                                <Typography>Preview</Typography>
-                                {state[actor.id].link && state[actor.id].isPlaying ?
-                                    <ReactPlayer url={getLink(actor.id)}
-                                                 controls={true}
-                                                 muted={true}
-                                                 playing={true}
-                                                 width={'200px'}
-                                                 height={'100px'}
-                                    /> :
-                                    <Box position={'relative'}>
-                                        <img src={actor.img} style={{maxWidth: '200px', maxHeight: '100px'}}/>
-                                        <Box position={'absolute'} bottom={15} left={0} right={0}
-                                             sx={{transform: 'rotate(-5deg)'}}
-                                        >
-                                            <Typography>
-                                                Tra poco...
-                                            </Typography>
-                                        </Box>
-                                    </Box>
+                            <Stack direction={mobile ? 'column' : 'row'} flexWrap={'wrap'} alignItems={'center'}>
+                                {
+                                    Object.values(actor.scenes).map((scene) => (
+                                        <Stack direction={mobile ? 'column' : 'row'}
+                                               flexWrap={'wrap'}
+                                               justifyContent={'center'} alignItems={'center'}
+                                               key={scene.id} my={1} mr={2} px={2} py={1} component={Paper} spacing={1}>
+                                            <Stack alignItems={'start'}>
+                                                {(state[actor.id]?.isPlaying && state[actor.id]?.sceneId === scene.id) ?
+                                                    <StyledBadge
+                                                        overlap="circular"
+                                                        anchorOrigin={{vertical: 'middle', horizontal: 'right'}}
+                                                        variant="dot">
+                                                        <Chip label={`_${scene.label}`}
+                                                              color={'primary'}/>
+                                                    </StyledBadge>
+                                                    : <Chip label={`_${scene.label}`}
+                                                            color={'primary'}/>}
+                                            </Stack>
+                                            {<Stack component={Paper} variant={'outlined'}>
+                                                <Typography>Video Preview</Typography>
+                                                <ReactPlayer url={scene.file}
+                                                             controls={true}
+                                                             muted={true}
+                                                    //playing={true}
+
+                                                             width={'200px'}
+                                                             height={'100px'}
+                                                />
+                                            </Stack>}
+                                            <Stack mt={1} spacing={1} justifyContent={'end'}>
+                                                <Tooltip
+                                                    title={'Mandando il link live l\'app aggiornerà il player di ' + actor.name}>
+                                                    <span>
+                                                        <Button variant={'contained'} fullWidth
+                                                                startIcon={<PlayCircle/>}
+                                                                onClick={() => handlePlayRecordedVideo(actor.id, scene.id)}
+                                                                disabled={(state[actor.id]?.isPlaying && state[actor.id]?.sceneId === scene.id)}
+                                                        >
+                                                            Play
+                                                        </Button>
+                                                    </span>
+                                                </Tooltip>
+                                                <Tooltip
+                                                    title={'Togli il player di ' + actor.name + ' e metti la cover'}>
+                                                    <span>
+                                                        <Button variant={'default'} fullWidth
+                                                                startIcon={<StopCircle/>}
+                                                                onClick={() => handleStopActor(actor.id)}>
+                                                            Stop
+                                                        </Button>
+                                                    </span>
+                                                </Tooltip>
+                                            </Stack>
+                                            <Stack component={Paper} variant={'outlined'}>
+                                                <Typography>Video Live</Typography>
+                                                {(state[actor.id]?.isPlaying && state[actor.id]?.sceneId === scene.id) ?
+                                                    <Streaming followedActor={actor} width={'200px'} height={'100px'}/>
+                                                    : <Box position={'relative'}>
+                                                        <img src={actor.img}
+                                                             style={{
+                                                                 width: '200px',
+                                                                 maxHeight: '100px',
+                                                                 objectFit: 'cover'
+                                                             }}/>
+                                                        <Box position={'absolute'} bottom={15} left={0} right={0}
+                                                             sx={{transform: 'rotate(-5deg)'}}
+                                                        >
+                                                            <Typography>
+                                                                Tra poco...
+                                                            </Typography>
+                                                        </Box>
+                                                    </Box>}
+                                            </Stack>
+                                        </Stack>
+                                    ))
                                 }
                             </Stack>
                         </Stack>
-                        <Stack mt={3} direction={mobile ? 'column' : 'row'} marginLeft={'auto'} alignItems={'center'}
-                               spacing={1}
-                               flexWrap={'wrap'}>
-                            <Chip label={'Embed Link'} color={'primary'}
-                                  variant={!state[actor.id].code || state[actor.id].code?.length !== 11 ? 'outlined' : 'standard'}
-                                  size={'small'}/>
-                            <Box>
-                                <Typography textAlign={'center'} color={'white'} variant={'subtitle2'} flexWrap={'wrap'}
-                                            sx={{wordBreak: 'break-word'}}
-                                >
-                                    <a
-                                        className="App-link"
-                                        href={getLink(actor.id)}
-                                        target="_blank"
-                                        rel="noopener noreferrer">
-                                        {getLink(actor.id)}
-                                    </a>
-                                </Typography>
-                            </Box>
-                            <Stack direction={'row'} spacing={2}>
-                                <Tooltip title={'Copia link da embeddare'}>
-                                    <IconButton variant={'contained'}
-                                                sx={{color: muiTheme.palette.primary.main}}
-                                                disabled={!state[actor.id].code || state[actor.id].code?.length !== 11}
-                                                onClick={() => copyLink(getLink(actor.id))}
-                                    >
-                                        <ContentCopy/>
-                                    </IconButton>
-                                </Tooltip>
-                                <Tooltip title={'Togli il player di ' + actor.name + ' e metti la cover'}>
-                                    <span>
-                                        <IconButton variant={'contained'}
-                                                    sx={{color: muiTheme.palette.primary.main}}
-                                                    onClick={() => handleStopActor(actor.id)}
-                                            //disabled={!state[actor.id].code || state[actor.id].code?.length !== 11}
-                                        >
-                                            <StopCircle/>
-                                        </IconButton>
-                                    </span>
-                                </Tooltip>
-                                <Tooltip title={'Mandando il link live l\'app aggiornerà il player di ' + actor.name}>
-                                    <span>
-                                        <Button variant={'contained'} fullWidth startIcon={<PlayCircle/>}
-                                                onClick={() => handlePlayLiveLink(actor.id)}
-                                                disabled={!state[actor.id].code || state[actor.id].code?.length !== 11}>
-                                            Play
-                                        </Button>
-                                    </span>
-                                </Tooltip>
-                            </Stack>
-                        </Stack>
-
                     </Stack>)}
             </Stack>
             <Stack marginY={3} width={mobile ? '100%' : '80%'} marginX={!mobile ? 'auto' : 'inherit'}
