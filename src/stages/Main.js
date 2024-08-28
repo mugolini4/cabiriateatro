@@ -6,6 +6,7 @@ import ReactPlayer from "react-player";
 import {useDocumentData} from "react-firebase-hooks/firestore";
 import {auth, firestore} from "../firebase_config";
 import {useNavigate} from "react-router-dom";
+import {VolumeOff, VolumeUp} from "@mui/icons-material";
 
 /** query params in yt url ?
  * controls=0 -> frame con i controlli
@@ -41,6 +42,8 @@ export const Streaming = ({followedActor, width = "100%", height = null}) => {
     const [isReady, setIsReady] = React.useState(false);
     const [transitionToBlack, setTransitionToBlack] = React.useState(false);
 
+    const [isMuted, setIsMuted] = useState(false);
+
     const [actorData, actorDataLoading, actorDataError] = useDocumentData(firestore.doc('recordedVideos/'+followedActor.id))
 
     const actorLink = useMemo(() => {
@@ -66,15 +69,24 @@ export const Streaming = ({followedActor, width = "100%", height = null}) => {
     const onReady = React.useCallback(() => {
         console.log("progressTimeSeconds:",progressTimeSeconds)
         if (!isReady) {
-            playerRef.current.seekTo(progressTimeSeconds, 'seconds');
-            setIsReady(true);
+            const duration = playerRef.current.getDuration()
+            if(duration && duration >= progressTimeSeconds) {
+                playerRef.current.seekTo(progressTimeSeconds, 'seconds');
+                setIsReady(true);
+            } else {
+                setTransitionToBlack(true)
+            }
         }
     }, [isReady, progressTimeSeconds]);
 
     const onEnded = React.useCallback(() => {
-        console.log("progressTimeSeconds:",progressTimeSeconds)
+        console.log("onEnded progressTimeSeconds:",progressTimeSeconds)
         setTransitionToBlack(true)
     }, [isReady, progressTimeSeconds]);
+
+    const handleMuteUnmute = () => {
+        setIsMuted(!isMuted);
+    };
 
     return (
         <Box py={2}>
@@ -87,18 +99,35 @@ export const Streaming = ({followedActor, width = "100%", height = null}) => {
                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                      allowFullScreen/>*/}
             {(actorData?.isPlaying && !transitionToBlack) ?
-                <ReactPlayer // url={actorLink}
-                    //url={`streaming/scena9/${followedActor.id}.mp4`}
-                    ref={playerRef}
-                    url={actorData.video}
-                    controls={true}
-                    muted={true}
-                    playing={true}
-                    onReady={onReady}
-                    onEnded={onEnded}
-                    width={width}
-                    height={height}
-                /> : null}
+                <>
+                    <ReactPlayer // url={actorLink}
+                        //url={`streaming/scena9/${followedActor.id}.mp4`}
+                        ref={playerRef}
+                        url={actorData.video}
+                        controls={false}
+                        config={{
+                            file: {
+                                attributes: {
+                                    controlsList: "noplay notimeline nofullscreen nodownload noremoteplayback",
+                                    playsInline: true,
+                                },
+                            },
+                        }}
+                        muted={isMuted}
+                        playing={true}
+                        onReady={onReady}
+                        onEnded={onEnded}
+                        width={width}
+                        height={height}
+                        playsinline={true}
+                    />
+                    <Button
+                        className={`control-button ${isMuted ? "unmute" : "mute"}`}
+                        onClick={handleMuteUnmute}
+                        startIcon={isMuted ? <VolumeOff /> : <VolumeUp />}
+                    >
+                    </Button>
+                </> : null}
             {(actorData?.isPlaying === false) &&
                 <Box position={'relative'}>
                     <img src={followedActor.img} style={{maxWidth: '100%'}}/>

@@ -24,16 +24,17 @@ const staticBuildFiles = self.__WB_MANIFEST;
 
 // extra file URLs you want to be precached
 const extraPrecachedFiles = [
-    "/streaming/scena3/romeo.mp4",
-    "/streaming/scena3/giulietta.mp4",
-    "/streaming/scena9/romeo.mp4",
-    "/streaming/scena9/giulietta.mp4",
+    {url: "/streaming/scena3/romeo.mp4", revision: '2'},
+    {url: "/streaming/scena3/giulietta.mp4", revision: null},
+    {url: "/streaming/scena9/romeo.mp4", revision: null},
+    {url: "/streaming/scena9/giulietta.mp4", revision: null},
+    {url: "https://storage.googleapis.com/eni-plenitude-ai-public/1721748512532-57.jpg", revision: null}
 ];
 
 // register all assets to be precached by the service worker
 precacheAndRoute([
     ...staticBuildFiles,
-    ...extraPrecachedFiles.map((url) => ({ url, revision: null }))
+    ...extraPrecachedFiles
 ]);
 //precacheAndRoute(self.__WB_MANIFEST);
 
