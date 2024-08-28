@@ -121,8 +121,8 @@ function SlidoInteraction() {
                 Interagisci con la diretta ❤️👍
             </AccordionSummary>
             <AccordionDetails>
-                <iframe src="https://wall.sli.do/event/wRVrJ5g1JWtQ1xp4JpMjdi?section=bfc92e9e-ad69-4600-a1e0-c465c27c67da" // present
-                        //src="https://app.sli.do/event/wRVrJ5g1JWtQ1xp4JpMjdi" //interazioni
+                <iframe //src="https://wall.sli.do/event/wRVrJ5g1JWtQ1xp4JpMjdi?section=bfc92e9e-ad69-4600-a1e0-c465c27c67da" // present
+                        src="https://app.sli.do/event/wRVrJ5g1JWtQ1xp4JpMjdi" //interazioni
                         height="100%"
                         width="100%"
                         frameBorder="0"
