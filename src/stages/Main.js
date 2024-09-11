@@ -25,9 +25,9 @@ import {Close, ExpandMore} from "@mui/icons-material";
 export const Actors = [
     {
         id: 'amleto',
-        name: 'Amleto',
+        name: 'Diretta',
         timeout: 1700,
-        img: '/amleto.jpeg',
+        img: '/diretta.png',
         link: `https://www.youtube.com/embed/kmFdwPYOlYw?autoplay=1&mute=0&allowfullscreen=0`
     },
     {
