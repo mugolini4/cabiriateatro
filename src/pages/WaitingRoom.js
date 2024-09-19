@@ -51,7 +51,7 @@ const WaitingRoom = () => {
                 {showData?.location}
             </Typography>}
             {<Button disabled={showData?.isPlaying} variant={"contained"} href={showData?.when}>
-                Rispondi al form dopo il test
+                Rispondi al form dopo il test!
             </Button>}
             {/*<Typography variant={"subtitle1"} color={`gray`} fontWeight={900}>
                 Portate le cuffie!
