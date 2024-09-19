@@ -30,32 +30,32 @@ const WaitingRoom = () => {
                      marginBottom: '12px'
                  }}
                  alt={'cabiria_logo'}/>
-            {<Typography variant={"subtitle1"} color={`gray`}>
+            {/*<Typography variant={"subtitle1"} color={`gray`}>
                 Le Notti di Cabiria presenta
-            </Typography>}
+            </Typography>*/}
             <Typography gutterBottom variant={"h4"} color={`gray`} paddingX={1}>
                 {showData?.name}
             </Typography>
-            <img src={'/cover_reggio.jpeg'} width={'210px'}
+            {/*<img src={'/cover_reggio.jpeg'} width={'210px'}
                  style={{
                      filter: `opacity(0.75)`,
                      borderRadius: '20px',
                      //padding: 2,
                      marginBottom: '12px'
                  }}
-                 alt={'cabiria_logo'}/>
+                 alt={'cabiria_logo'}/>*/}
             {/*<Typography gutterBottom variant={"h6"} color={`gray`}>
                 Lo spettacolo sta per iniziare....
             </Typography>*/}
-            {<Typography variant={"h6"} color={`gray`}>
+            {<Typography gutterBottom variant={"subtitle1"} color={`gray`}>
                 {showData?.location}
             </Typography>}
-            {<Typography variant={"subtitle1"} color={`gray`}>
-                {showData?.when}
-            </Typography>}
-            {<Typography variant={"subtitle1"} color={`gray`} fontWeight={900}>
+            {<Button disabled={showData?.isPlaying} variant={"contained"} href={showData?.when}>
+                Rispondi al form dopo il test
+            </Button>}
+            {/*<Typography variant={"subtitle1"} color={`gray`} fontWeight={900}>
                 Portate le cuffie!
-            </Typography>}
+            </Typography>*/}
             <Button component={Link} to="/main"
                     endIcon={<Start/>} variant={'contained'}
                     //disabled={Date.now() <= new Date(2022, 5, 3)}

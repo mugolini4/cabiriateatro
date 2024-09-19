@@ -15,23 +15,22 @@ import {VolumeOff, VolumeUp} from "@mui/icons-material";
 export const Actors = [
     {
         id: 'romeo',
-        name: 'Romeo',
+        name: 'Cucina creativa?',
         timeout: 1700,
-        img: '/Romeo.jpeg',
+        img: '/img.png',
         link: `https://www.youtube.com/embed/kmFdwPYOlYw?autoplay=1&mute=0`,
         scenes: {
-            scena3: {label: "Scena 3", id: 'scena3', file: 'streaming/scena3/romeo.mp4'},
-            scena9: {label: "Scena 9", id: 'scena9', file: 'streaming/scena9/romeo.mp4'}
+            scena1: {label: "Scena 1", id: 'scena1', file: 'streaming/scena1/attore1.mp4'},
         }
     },
     {
         id: 'giulietta',
-        name: 'Giulia',
+        name: 'Piramidi?',
         timeout: 3200,
-        img: '/Giulietta.jpeg',
+        img: '/attore2.png',
         link: `https://www.youtube.com/embed/CCdlDNtc4hc?autoplay=1&mute=0`,
         scenes: {
-            scena9: {label: "Scena 9", id: 'scena9', file: 'streaming/scena9/giulietta.mp4'}
+            scena1: {label: "Scena 1", id: 'scena1', file: 'streaming/scena1/attore2.mp4'}
         }
         //{name: 'Giulia', timeout: 3200, link: `https://www.youtube.com/embed/channel/UCMesJQDqxYkz7rLNZv2adNg/live`
     },
