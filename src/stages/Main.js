@@ -37,6 +37,7 @@ export const Actors = [
 ]
 
 export const Streaming = ({muted = "0", followedActor, width = "100%", height = null}) => {
+    console.log("followedActor:",followedActor)
     const playerRef = React.useRef();
     const [isReady, setIsReady] = React.useState(false);
     const [transitionToBlack, setTransitionToBlack] = React.useState(false);
