@@ -243,7 +243,7 @@ const Control = () => {
                                             <Stack component={Paper} variant={'outlined'}>
                                                 <Typography>Video Live</Typography>
                                                 {(state[actor.id]?.isPlaying && state[actor.id]?.sceneId === scene.id) ?
-                                                    <Streaming followedActor={actor} width={'200px'} height={'100px'}/>
+                                                    <Streaming muted={"1"} followedActor={actor} width={'200px'} height={'100px'}/>
                                                     : <Box position={'relative'}>
                                                         <img src={actor.img}
                                                              style={{

@@ -1,5 +1,5 @@
 import React, {useEffect, useMemo, useState} from "react";
-import {Avatar, Box, Button, Grow, Stack, Typography} from "@mui/material";
+import {Avatar, Box, Button, Grow, Icon, IconButton, Stack, Typography} from "@mui/material";
 import {muiTheme} from "../theme";
 import StyledBadge from "../components/StyledBadge";
 import ReactPlayer from "react-player";
@@ -36,12 +36,16 @@ export const Actors = [
     },
 ]
 
-export const Streaming = ({followedActor, width = "100%", height = null}) => {
+export const Streaming = ({muted = "0", followedActor, width = "100%", height = null}) => {
     const playerRef = React.useRef();
     const [isReady, setIsReady] = React.useState(false);
     const [transitionToBlack, setTransitionToBlack] = React.useState(false);
 
-    const [isMuted, setIsMuted] = useState(false);
+    const [isMuted, setIsMuted] = useState(muted === "1");
+
+    useEffect(() => {
+        setIsMuted(muted === "1")
+    }, [followedActor])
 
     const [actorData, actorDataLoading, actorDataError] = useDocumentData(firestore.doc('recordedVideos/'+followedActor.id))
 
@@ -120,12 +124,13 @@ export const Streaming = ({followedActor, width = "100%", height = null}) => {
                         height={height}
                         playsinline={true}
                     />
-                    <Button
+                    <IconButton
+                        color={'primary'}
                         className={`control-button ${isMuted ? "unmute" : "mute"}`}
                         onClick={handleMuteUnmute}
-                        startIcon={isMuted ? <VolumeOff /> : <VolumeUp />}
                     >
-                    </Button>
+                        {isMuted ? <VolumeOff sx={{fontSize: '45px'}} /> : <VolumeUp sx={{fontSize: '45px'}} />}
+                    </IconButton>
                 </> : null}
             {(actorData?.isPlaying === false) &&
                 <Box position={'relative'}>
@@ -164,9 +169,11 @@ const MainStage = ({show}) => {
         return index === Actors.findIndex((o) => o.name === followedActor?.name)
     }
 
+    const isMuted = navigator.userAgent.includes("iPhone")
+
     return (
         <Stack p={2} sx={{height: '70vh', backgroundColor: 'black'}} justifyContent={'center'}>
-            {followedActor && <Streaming followedActor={followedActor}/>}
+            {followedActor && <Streaming muted={isMuted ? "1" : "0"} followedActor={followedActor}/>}
             <Box px={2} position={"fixed"} bottom={20} left={0} right={0}>
                 <Typography gutterBottom color={`lightgray`}>
                     {'Scegli chi vuoi spiare...'}

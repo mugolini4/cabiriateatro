@@ -20,7 +20,7 @@ const WaitingRoom = () => {
     const [showData, showDataLoading, ] = useDocumentData(firestore.doc('config/show'))
 
     return (
-        <Box sx={waitingRoomSx}>
+        <Box px={3} sx={waitingRoomSx}>
             {<Backdrop open={showDataLoading} children={<CircularProgress/>} sx={{zIndex:1}}/>}
             <img src={'/img.png'} width={'55px'}
                  style={{
