@@ -27,7 +27,7 @@ const extraPrecachedFiles = [
     {url: "/streaming/scena3/romeo.mp4", revision: '2'},
     {url: "/streaming/scena3/giulietta.mp4", revision: null},
     {url: "/streaming/scena9/romeo.mp4", revision: null},
-    {url: "/streaming/scena9/giulietta.mp4", revision: null},
+    {url: "/streaming/scena9/giulietta.mp4", revision: '1'},
     {url: "https://storage.googleapis.com/eni-plenitude-ai-public/1721748512532-57.jpg", revision: null}
 ];
 
