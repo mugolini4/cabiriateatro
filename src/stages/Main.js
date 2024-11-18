@@ -18,39 +18,53 @@ export const Actors = [
         name: 'Romeo',
         timeout: 1700,
         img: '/Romeo.jpeg',
-        link: `https://www.youtube.com/embed/kmFdwPYOlYw?autoplay=1&mute=0`,
-        scenes: {
+        //link: `https://www.youtube.com/embed/kmFdwPYOlYw?autoplay=1&mute=0`,
+        /*scenes: {
             scena3: {label: "Scena 3", id: 'scena3', file: 'streaming/scena3/romeo.mp4'},
             scena9: {label: "Scena 9", id: 'scena9', file: 'streaming/scena9/romeo.mp4'}
-        }
+        }*/
     },
     {
         id: 'giulietta',
         name: 'Giulia',
         timeout: 3200,
         img: '/Giulietta.jpeg',
-        link: `https://www.youtube.com/embed/CCdlDNtc4hc?autoplay=1&mute=0`,
+        /*link: `https://www.youtube.com/embed/CCdlDNtc4hc?autoplay=1&mute=0`,
         scenes: {
+            scena3: {label: "Scena 3", id: 'scena3', file: 'streaming/scena3/giulietta.mp4'},
             scena9: {label: "Scena 9", id: 'scena9', file: 'streaming/scena9/giulietta.mp4'}
-        }
+        }*/
         //{name: 'Giulia', timeout: 3200, link: `https://www.youtube.com/embed/channel/UCMesJQDqxYkz7rLNZv2adNg/live`
     },
 ]
 
-export const Streaming = ({followedActor, width = "100%", height = null}) => {
+export const Scenes = [
+    {
+        id: 'scena3',
+        name: 'Scena 3',
+        videos: [
+            {actor: "romeo", file: "streaming/scena3/romeo.mp4"},
+            {actor: "giulietta", file: "streaming/scena3/giulietta.mp4"},
+        ]
+    },
+    {
+        id: 'scena9',
+        name: 'Scena 9',
+        videos: [
+            {actor: "romeo", file: "streaming/scena9/romeo.mp4"},
+            {actor: "giulietta", file: "streaming/scena9/giulietta.mp4"},
+        ]
+    }
+]
+
+export const Streaming = ({followedActor, width = "100%", height = null, control = false}) => {
     const playerRef = React.useRef();
     const [isReady, setIsReady] = React.useState(false);
     const [transitionToBlack, setTransitionToBlack] = React.useState(false);
 
-    const [isMuted, setIsMuted] = useState(false);
+    const [isMuted, setIsMuted] = useState(control);
 
     const [actorData, actorDataLoading, actorDataError] = useDocumentData(firestore.doc('recordedVideos/'+followedActor.id))
-
-    const actorLink = useMemo(() => {
-        if(!actorData)
-            return null
-        return `https://www.youtube.com/embed/${actorData?.streamingString}?autoplay=1&mute=0`
-    }, [actorData])
 
     const progressTimeSeconds = useMemo(() => {
         if(!actorData)
