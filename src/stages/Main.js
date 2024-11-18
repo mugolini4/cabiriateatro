@@ -52,7 +52,7 @@ export const Scenes = [
         name: 'Scena 9',
         videos: [
             {actor: "romeo", file: "streaming/scena9/romeo.mp4"},
-            {actor: "giulietta", file: "streaming/scena9/giulietta.mp4"},
+            {actor: "giulietta", file: "streaming/scena9/giulietta-macchina.mp4"},
         ]
     }
 ]
