@@ -66,7 +66,7 @@ const Control = () => {
     return (
         <Stack sx={controlRoomSx} alignItems={'center'}>
             <Typography variant={'h4'} gutterBottom color={muiTheme.palette.primary.main}>
-                Link streaming attori
+                Pannello di controllo
             </Typography>
             <Stack p={2} mt={2} spacing={3} width={mobile ? '100%' : '80%'} marginX={!mobile ? 'auto' : 'inherit'}
                    component={Paper} variant={"outlined"}
