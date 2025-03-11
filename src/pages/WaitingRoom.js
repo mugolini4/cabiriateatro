@@ -17,7 +17,7 @@ export const waitingRoomSx = {
 }
 
 const WaitingRoom = () => {
-    const [showData, showDataLoading, ] = useDocumentData(firestore.doc('config/show'))
+    const [showData, showDataLoading, ] = useDocumentData(firestore.doc('facciamone-un-dramma/config'))
 
     return (
         <Box sx={waitingRoomSx}>
@@ -73,7 +73,7 @@ const WaitingRoom = () => {
                         target="_blank"
                         rel="noopener noreferrer">
                     </a>*/}
-                <Button component={Link} to="/">Powered by GOMBOC</Button>
+                <Button href="https://gomboc.it" target={"_blank"}>Powered by GOMBOC</Button>
                 {/*<Typography gutterBottom variant={"caption"} color={`gray`} fontWeight={900}>
                     NU ARTS AND COMMUNITY
                 </Typography>*/}
