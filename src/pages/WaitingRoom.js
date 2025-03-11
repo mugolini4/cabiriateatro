@@ -31,7 +31,7 @@ const WaitingRoom = () => {
                  }}
                  alt={'cabiria_logo'}/>
             {<Typography variant={"subtitle1"} color={`gray`}>
-                Le Notti di Cabiria presenta
+                Il Teatro Coccia presenta
             </Typography>}
             <Typography gutterBottom variant={"h4"} color={`gray`} paddingX={1}>
                 {showData?.name}
