@@ -6,7 +6,7 @@ import ReactPlayer from "react-player";
 import {useDocumentData} from "react-firebase-hooks/firestore";
 import {auth, firestore} from "../firebase_config";
 import {useNavigate} from "react-router-dom";
-import {VolumeOff, VolumeUp} from "@mui/icons-material";
+import {Refresh, VolumeOff, VolumeUp} from "@mui/icons-material";
 
 /** query params in yt url ?
  * controls=0 -> frame con i controlli
@@ -43,28 +43,38 @@ export const Scenes = [
         id: 'scena3',
         name: 'Scena 3',
         videos: [
-            {actor: "romeo", file: "streaming/scena3/romeo.mp4"},
-            {actor: "giulietta", file: "streaming/scena3/giulietta.mp4"},
+            {actor: "romeo", file: "streaming/scena3/romeo-festa-480p-low.mp4"},
+            {actor: "giulietta", file: "streaming/scena3/giulietta-festa-480p-low.mp4"},
         ]
     },
     {
         id: 'scena9',
         name: 'Scena 9',
         videos: [
-            {actor: "romeo", file: "streaming/scena9/romeo.mp4"},
-            {actor: "giulietta", file: "streaming/scena9/giulietta-macchina.mp4"},
+            {actor: "romeo", file: "streaming/scena9/romeo-tugurio-low.mp4"},
+            {actor: "giulietta", file: "streaming/scena9/giulietta-macchina-low.mp4"},
         ]
     }
 ]
 
-export const Streaming = ({followedActor, width = "100%", height = null, control = false}) => {
+export const Streaming = ({muted = "0", followedActor, width = "100%", height = null, control = false}) => {
     const playerRef = React.useRef();
     const [isReady, setIsReady] = React.useState(false);
     const [transitionToBlack, setTransitionToBlack] = React.useState(false);
 
-    const [isMuted, setIsMuted] = useState(control);
+    const [isMuted, setIsMuted] = useState(muted === "1");
+
+    useEffect(() => {
+        setIsMuted(muted === "1")
+    }, [followedActor])
 
     const [actorData, actorDataLoading, actorDataError] = useDocumentData(firestore.doc('recordedVideos/'+followedActor.id))
+
+    const actorLink = useMemo(() => {
+        if(!actorData)
+            return null
+        return `https://www.youtube.com/embed/${actorData?.streamingString}?autoplay=1&mute=0`
+    }, [actorData])
 
     const progressTimeSeconds = useMemo(() => {
         if(!actorData)
@@ -135,12 +145,20 @@ export const Streaming = ({followedActor, width = "100%", height = null, control
                         height={height}
                         playsinline={true}
                     />
-                    <Button
-                        className={`control-button ${isMuted ? "unmute" : "mute"}`}
-                        onClick={handleMuteUnmute}
-                        startIcon={isMuted ? <VolumeOff /> : <VolumeUp />}
-                    >
-                    </Button>
+                    <Stack direction={'row'} alignItems={"center"}>
+                        <Button
+                            className={`control-button unmute`}
+                            onClick={() => setIsMuted(false)}
+                            startIcon={<Refresh />}
+                        >
+                        </Button>
+                        <Button
+                            className={`control-button ${isMuted ? "unmute" : "mute"}`}
+                            onClick={handleMuteUnmute}
+                            startIcon={isMuted ? <VolumeOff /> : <VolumeUp />}
+                        >
+                        </Button>
+                    </Stack>
                 </> : null}
             {(actorData?.isPlaying === false) &&
                 <Box position={'relative'}>
@@ -179,9 +197,11 @@ const MainStage = ({show}) => {
         return index === Actors.findIndex((o) => o.name === followedActor?.name)
     }
 
+    const isMuted = navigator.userAgent.includes("iPhone")
+
     return (
         <Stack p={2} sx={{height: '70vh', backgroundColor: 'black'}} justifyContent={'center'}>
-            {followedActor && <Streaming followedActor={followedActor}/>}
+            {followedActor && <Streaming muted={isMuted ? "1" : "0"} followedActor={followedActor}/>}
             <Box px={2} position={"fixed"} bottom={20} left={0} right={0}>
                 <Typography gutterBottom color={`lightgray`}>
                     {'Scegli chi vuoi spiare...'}

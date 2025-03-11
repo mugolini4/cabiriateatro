@@ -36,7 +36,7 @@ const WaitingRoom = () => {
             <Typography gutterBottom variant={"h4"} color={`gray`} paddingX={1}>
                 {showData?.name}
             </Typography>
-            <img src={'/cover_reggio.jpeg'} width={'210px'}
+            <img src={'/cover.jpeg'} width={'210px'}
                  style={{
                      filter: `opacity(0.75)`,
                      borderRadius: '20px',
@@ -52,9 +52,6 @@ const WaitingRoom = () => {
             </Typography>}
             {<Typography variant={"subtitle1"} color={`gray`}>
                 {showData?.when}
-            </Typography>}
-            {<Typography variant={"subtitle1"} color={`gray`} fontWeight={900}>
-                Portate le cuffie!
             </Typography>}
             <Button component={Link} to="/main"
                     endIcon={<Start/>} variant={'contained'}
