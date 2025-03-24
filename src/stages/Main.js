@@ -17,7 +17,7 @@ export function SlidoInteraction({preview = false}) {
                        borderRadius: '1.1rem'
                    }}
             >
-                <Typography sx={{py:1}} gutterBottom variant={!preview ? 'h6' : 'caption'}>Interagisci con lo spettacolo ❤️👍</Typography>
+                {/*<Typography sx={{py:1}} gutterBottom variant={!preview ? 'h6' : 'caption'}>Interagisci con lo spettacolo ❤️👍</Typography>*/}
                 <iframe //src="https://wall.sli.do/event/wRVrJ5g1JWtQ1xp4JpMjdi?section=bfc92e9e-ad69-4600-a1e0-c465c27c67da" // present
                     src="https://app.sli.do/event/wRVrJ5g1JWtQ1xp4JpMjdi" //interazioni
                     height="100%"
