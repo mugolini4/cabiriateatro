@@ -4,7 +4,6 @@ import {BACKGROUND, muiTheme} from "../theme";
 import {useDocumentData} from "react-firebase-hooks/firestore";
 import {auth, firestore} from "../firebase_config";
 import {useNavigate} from "react-router-dom";
-import logo from "../instable_gomboc.gif";
 
 export function SlidoInteraction({preview = false}) {
     return <Grow in timeout={1000}>
@@ -12,6 +11,7 @@ export function SlidoInteraction({preview = false}) {
                 //backgroundColor: muiTheme.palette.primary.main,
                 color: 'white',
                 fontWeight: 'bold',
+                zIndex: '999'
             }}
                    style={{
                        borderRadius: '1.1rem'
@@ -21,10 +21,11 @@ export function SlidoInteraction({preview = false}) {
                 <iframe //src="https://wall.sli.do/event/wRVrJ5g1JWtQ1xp4JpMjdi?section=bfc92e9e-ad69-4600-a1e0-c465c27c67da" // present
                     src="https://app.sli.do/event/wRVrJ5g1JWtQ1xp4JpMjdi" //interazioni
                     height="100%"
-                    width="100%"
+                    width="80%"
                     frameBorder="0"
                     style={{
-                        minHeight: !preview ? '90vh' : '5vh',
+                        margin: 'auto',
+                        minHeight: !preview ? '80vh' : '5vh',
                         borderRadius: '1rem',
                     }}
                     title="Amleto">
@@ -50,21 +51,37 @@ export const MainStage = ({preview}) => {
     }, [showData, auth])
 
     return (
-        <Stack p={0} sx={{height: '100vh', backgroundColor: BACKGROUND}} justifyContent={'center'}>
-            {
-                showData?.openInteraction === true ?
-                    <SlidoInteraction preview={preview}/>
-                    :
-                    <Grow in={!showData?.openInteraction} timeout={1500}>
-                        <Stack p={5} alignItems={'center'} spacing={1}>
-                            <Typography variant={!preview ? 'h5' : 'body2'} color={'primary'} sx={{opacity: 0.7}}>
-                                Resta collegato per interagire
-                            </Typography>
-                            <img src={logo} style={{opacity: 0.2, width: '50px', padding: '0.5rem', filter: 'brightness(0) invert(1)'}}/>
-                        </Stack>
-                    </Grow>
-            }
-        </Stack>
+      <Stack p={0} sx={{height: '100vh', backgroundColor: BACKGROUND}} justifyContent={'center'}>
+        {!preview && <img src={"/bkg.png"}
+              style={{
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                width: '100vw',
+                height: '100vh',
+                objectFit: 'fill',
+                opacity: 1,
+                zIndex: 0,
+              }}
+        />}
+        {
+          showData?.openInteraction === true ?
+            <SlidoInteraction preview={preview}/>
+            :
+            <Grow in={!showData?.openInteraction} timeout={1500}>
+              <Stack p={6} alignItems={'center'} spacing={1}>
+                <Typography fontFamily={'Amarante'} variant={!preview ? 'h4' : 'body2'} color={'primary'}
+                            sx={{opacity: 0.7}}>
+                  Resta collegato per interagire
+                </Typography>
+                <img src={"/luna-elemento.png"}
+                     width={'150px'}
+                     style={{zIndex: 9999}}
+                />
+              </Stack>
+            </Grow>
+        }
+      </Stack>
     );
 }
 

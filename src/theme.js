@@ -1,8 +1,8 @@
 import {alpha, createTheme} from "@mui/material";
 
-const PRIMARY = "#aba75f";
+const PRIMARY = "#FFFFFF";
 const SECONDARY = "#808080";
-export const BACKGROUND = "#1a1a1a";
+export const BACKGROUND = "#000000";
 const ERROR = "#b00020";
 
 const font = "'Montserrat','Helvetica Neue','Arial','sans-serif','Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol'"
