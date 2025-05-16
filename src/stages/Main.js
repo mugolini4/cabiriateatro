@@ -70,7 +70,7 @@ export const MainStage = ({preview}) => {
             :
             <Grow in={!showData?.openInteraction} timeout={1500}>
               <Stack p={6} alignItems={'center'} spacing={1}>
-                <Typography fontFamily={'Amarante'} variant={!preview ? 'h4' : 'body2'} color={'primary'}
+                <Typography fontFamily={'Grasond'} variant={!preview ? 'h4' : 'body2'} color={'primary'}
                             sx={{opacity: 0.7}}>
                   Resta collegato per interagire
                 </Typography>

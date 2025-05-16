@@ -20,7 +20,7 @@ const WaitingRoom = () => {
   const [showData, showDataLoading,] = useDocumentData(firestore.doc('facciamone-un-dramma/config'))
 
   return (
-    <Stack spacing={1} sx={waitingRoomSx}>
+    <Stack spacing={0} sx={waitingRoomSx}>
       {<Backdrop open={showDataLoading} children={<CircularProgress/>} sx={{zIndex: 1}}/>}
       <img src={'/logo-coccia.png'} width={'220px'}
            style={{
@@ -34,16 +34,19 @@ const WaitingRoom = () => {
         <Typography variant={"subtitle2"}>
           Il Teatro Coccia presenta
         </Typography>
-        <Typography fontFamily={'Amarante'} gutterBottom variant={"h4"} paddingX={1}>
-          {showData?.name}
+        <Typography fontFamily={'Grasond'} gutterBottom variant={"h4"} paddingX={1}>
+          {showData?.name.toUpperCase()}
         </Typography>
       </Stack>}
-      <img src={'/luna-elemento.png'} width={'85%'}
+      <img src={'/cover-nozze.jpeg'} width={'65%'}
            style={{
              filter: `opacity(1)`,
              borderRadius: '20px',
              //padding: 2,
-             marginBottom: '12px'
+             aspectRatio: '1/1',
+             marginBottom: '12px',
+             objectFit: 'cover',
+             objectPosition: 'center center',
            }}
            alt={'cabiria_logo'}/>
       {/*<Typography gutterBottom variant={"h6"}>

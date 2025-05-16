@@ -14,7 +14,7 @@ code {
 }
 
 @font-face {
-  font-family: 'Amarante';
+  font-family: 'Grasond';
   font-weight: 400;
-  src: local('Amarante'), url(./assets/fonts/Amarante-Regular.ttf) format('truetype');
+  src: local('Grasond'), url(./assets/fonts/Grasond-Regular.otf) format('opentype');
 }
