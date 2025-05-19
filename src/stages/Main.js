@@ -72,7 +72,7 @@ export const MainStage = ({preview}) => {
               <Stack p={6} alignItems={'center'} spacing={1}>
                 <Typography fontFamily={'Grasond'} variant={!preview ? 'h4' : 'body2'} color={'primary'}
                             sx={{opacity: 0.7}}>
-                  Resta collegato per interagire
+                  {"Resta collegato per interagire".toUpperCase()}
                 </Typography>
                 <img src={"/luna-elemento.png"}
                      width={'150px'}
