@@ -43,16 +43,16 @@ export const Scenes = [
         id: 'scena3',
         name: 'Scena 3',
         videos: [
-            {actor: "romeo", file: "streaming/scena3/romeo-festa-480p-low.mp4"},
-            {actor: "giulietta", file: "streaming/scena3/giulietta-festa-480p-low.mp4"},
+            {actor: "romeo", file: "streaming/scena3/romeo-festa-low-v2.mp4"},
+            {actor: "giulietta", file: "streaming/scena3/giulietta-festa-low-v2.mp4"},
         ]
     },
     {
         id: 'scena9',
         name: 'Scena 9',
         videos: [
-            {actor: "romeo", file: "streaming/scena9/romeo-tugurio-v2.mp4"},
-            {actor: "giulietta", file: "streaming/scena9/giulietta-macchina-v2.mp4"},
+            {actor: "romeo", file: "streaming/scena9/romeo-tugurio-low-v2.mp4"},
+            {actor: "giulietta", file: "streaming/scena9/giulietta-macchina-low-v2.mp4"},
         ]
     }
 ]
