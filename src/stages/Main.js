@@ -51,8 +51,8 @@ export const Scenes = [
         id: 'scena9',
         name: 'Scena 9',
         videos: [
-            {actor: "romeo", file: "streaming/scena9/romeo-tugurio-low.mp4"},
-            {actor: "giulietta", file: "streaming/scena9/giulietta-macchina-low.mp4"},
+            {actor: "romeo", file: "streaming/scena9/romeo-tugurio-v2.mp4"},
+            {actor: "giulietta", file: "streaming/scena9/giulietta-macchina-v2.mp4"},
         ]
     }
 ]
