@@ -17,7 +17,7 @@ export const Actors = [
         id: 'romeo',
         name: 'Romeo',
         timeout: 1700,
-        img: '/Romeo.jpeg',
+        img: '/romeo-new.jpeg',
         //link: `https://www.youtube.com/embed/kmFdwPYOlYw?autoplay=1&mute=0`,
         /*scenes: {
             scena3: {label: "Scena 3", id: 'scena3', file: 'streaming/scena3/romeo.mp4'},
@@ -28,7 +28,7 @@ export const Actors = [
         id: 'giulietta',
         name: 'Giulia',
         timeout: 3200,
-        img: '/Giulietta.jpeg',
+        img: '/giulia-new.jpg',
         /*link: `https://www.youtube.com/embed/CCdlDNtc4hc?autoplay=1&mute=0`,
         scenes: {
             scena3: {label: "Scena 3", id: 'scena3', file: 'streaming/scena3/giulietta.mp4'},
@@ -43,7 +43,7 @@ export const Scenes = [
         id: 'scena3',
         name: 'Scena 3',
         videos: [
-            {actor: "romeo", file: "streaming/scena3/romeo-festa-low-v2.mp4"},
+            {actor: "romeo", file: "streaming/scena3/romeo-festa-v3.mp4"},
             {actor: "giulietta", file: "streaming/scena3/giulietta-festa-low-v2.mp4"},
         ]
     },
@@ -51,7 +51,7 @@ export const Scenes = [
         id: 'scena9',
         name: 'Scena 9',
         videos: [
-            {actor: "romeo", file: "streaming/scena9/romeo-tugurio-low-v2.mp4"},
+            {actor: "romeo", file: "streaming/scena9/romeo-tugurio-v3.mp4"},
             {actor: "giulietta", file: "streaming/scena9/giulietta-macchina-low-v2.mp4"},
         ]
     }
